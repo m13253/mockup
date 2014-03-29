@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>MidyMidy (Mockup)</title>
+<style>
+html, body, * {
+	text-rendering: geometricPrecision;
+	text-shadow: rgba(255, 255, 255, 0.2) 0px 0px 1px;
+	font-family: "Lucida Grande", "Lucida Sans Unicode", "Open Sans",
+	"Clear Sans", "Helvetica Neue", Helvetica, "Nimbus Sans L",
+	"DejaVu Sans", "Droid Sans", Arial, STXihei, "Heiti SC",
+	"Droid Sans Fallback", "WenQuanYi Micro Hei", "WenQuanYi Zen Hei",
+	"Microsoft Yahei", SimHei, SimSun, sans-serif;
+}
+html, body {
+	width: 100%;
+	height: 100%;
+	min-height: 100%;
+	margin: 0px;
+}
+::-webkit-scrollbar {
+	height: 13px;
+	width: 13px;
+	background-color: #d6d6d6;
+}
+::-webkit-scrollbar-thumb {
+	height: 42px;
+	background-color: #9b9d9e;
+	border: 3px solid #d6d6d6;
+	-webkit-border-radius: 6px;
+}
+::-webkit-scrollbar-thumb:hover {
+	background-color: #828586;
+}
+::-webkit-scrollbar-thumb:active {
+	background-color: #4a90d9;
+}
+::-webkit-scrollbar-thumb:window-inactive {
+	background-color: #ededed;
+}
+::-webkit-scrollbar-corner {
+	background-color: #d6d6d6;
+}
+body {
+	background-color: #1D62F0;
+	color: #000000;
+}
+#bg {
+	position: fixed;
+	top: 0px;
+	left: 0px;
+	width: 100%;
+	height: 75%;
+	background-image: linear-gradient(to bottom, #1AD6FD 0%, #1D62F0 100%);
+	z-index: -1;
+}
+#content {
+	width: 1024px;
+	min-height: 100%;
+	background-color: rgba(255, 255, 255, 0.25);
+	box-shadow: 0px 0px 32px 0px rgba(255, 255, 255, 0.25);
+	margin-left: auto;
+	margin-right: auto;
+	padding-top: 72px;
+}
+#banner {
+	position: fixed;
+	top: 0px;
+	left: 0px;
+	width: 100%;
+	min-width: 1024px;
+	height: 48px;
+	background-image: linear-gradient(to bottom, rgba(255, 255, 255, 0.9059) 0%, rgba(255, 255, 255, 0.9686) 100%);
+	box-shadow: 0px 0px 32px 0px rgba(0, 0, 0, 0.25);
+}
+#banner_content {
+	width: 1000px;
+	height: 36px;
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: 6px;
+}
+.banner_icon {
+	margin-left: 32px;
+}
+h1.title {
+	width: 976px;
+	font-weight: normal;
+	line-height: 150%;
+	margin-left: 12px;
+	margin-right: 12px;
+	padding-left: 12px;
+	padding-right: 12px;
+	color: #F7F7F7;
+	border-bottom: solid 2px #F7F7F7;
+}
+h2 {
+	width: 976px;
+	font-weight: normal;
+	line-height: 125%;
+	margin-left: 12px;
+	margin-right: 12px;
+	padding-left: 12px;
+	padding-right: 12px;
+	color: #F7F7F7;
+	border-bottom: solid 1.5px #F7F7F7;
+}
+.player {
+	width: 1024px;
+	height: 480px;
+	background-color: #FFFFFF;
+	background-image: url(kbgrid.svg);
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: 24px;
+	margin-bottom: 24px;
+}
+#comment_box {
+	width: 1000px;
+	height: 480px;
+	margin-top: 24px;
+	margin-bottom: 24px;
+	margin-left: auto;
+	margin-right: auto;
+	background-image: linear-gradient(to bottom, rgba(255, 255, 255, 0.25) 25%, rgba(164, 231, 134, 0.75) 90%);
+	background-attachment: fixed;
+}
+</style>
+</head>
+<body>
+<div id="bg"></div>
+<div id="banner">
+<div id="banner_content">
+<span style="font-size: 32px; color: #333333; font-family: 'Open Sans'; line-height: 32px">MidyMidy</span>
+<span style="float: right">
+<img class="banner_icon" src="search.svg" width="32" height="32" />
+<img class="banner_icon" src="upload.svg" width="32" height="32" />
+<img class="banner_icon" src="settings.svg" width="32" height="32" />
+</span>
+</div>
+</div>
+<div id="content">
+<h1 class="title">Jesu, Joy of Man's Desiring</h1>
+<div class="player">
+</div>
+<h2>评论</h2>
+<div id="comment_box"></div>
+<div style="margin-top: 1px; height: 1px"></div>
+</div>
+</body>
