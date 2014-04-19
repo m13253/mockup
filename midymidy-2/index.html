@@ -132,7 +132,7 @@ function makeBubble() {
     el.style.transform = el.style.webkitTransform = "translate3d(-0.5vmin, -0.5vmin, 0px) translate3d(" + x + "vw, " + y + "vh, 0px) scale(" + r + ")";
     el.style.transition = el.style.webkitTransition = "all 20s, opacity 10s";
     elBubbles.appendChild(el);
-    requestAnimateFrame(function() {
+    requestAnimationFrame(function() {
         var tox = x + 10*Math.random() - 5;
         var toy = y + 10*Math.random() - 5;
         var tor = r + Math.random() - 0.5;
@@ -151,8 +151,8 @@ function makeBubble() {
     }, 20000);
 }
 addEventListener("load", function () {
-    if(window.requestAnimateFrame)
-        requestAnimateFrame(function () {
+    if(window.requestAnimationFrame)
+        requestAnimationFrame(function () {
             setInterval(makeBubble, 2000);
             makeBubble();
         });
