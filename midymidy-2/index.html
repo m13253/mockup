@@ -132,26 +132,30 @@ function makeBubble() {
     el.style.transform = el.style.webkitTransform = "translate3d(-0.5vmin, -0.5vmin, 0px) translate3d(" + x + "vw, " + y + "vh, 0px) scale(" + r + ")";
     el.style.transition = el.style.webkitTransition = "all 20s, opacity 10s";
     elBubbles.appendChild(el);
-    setTimeout(function() {
+    requestAnimateFrame(function() {
         var tox = x + 10*Math.random() - 5;
         var toy = y + 10*Math.random() - 5;
         var tor = r + Math.random() - 0.5;
         if(tor < 0) tor = 0; else if(tor > 25) tor = 25;
         el.style.transform = el.style.webkitTransform = "translate3d(-0.5vmin, -0.5vmin, 0px) translate3d(" + tox + "vw, " + toy + "vh, 0px) scale(" + tor + ")";
         el.style.opacity = 0.5 - r*tor/40;
-    }, 100);
+    });
     setTimeout(function() {
         el.style.opacity = 0;
     }, 10000);
     setTimeout(function() {
-        el.remove();
+        if(el.remove)
+            el.remove();
+        else
+            document.getElementById("bubbles").removeChild(el);
     }, 20000);
 }
 addEventListener("load", function () {
     if(window.requestAnimateFrame)
         requestAnimateFrame(function () {
             setInterval(makeBubble, 2000);
-        }
+            makeBubble();
+        });
 });
 </script>
 </head>
