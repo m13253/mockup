@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <title>MidyMidy (Mockup)</title>
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link rel="stylesheet" href="adwaita-scrollbar.css" type="text/css" />
 <style>
@@ -115,49 +116,7 @@ h2 {
     overflow: hidden;
 }
 </style>
-<script language="javascript">
-Math.sqr = function(x) { return x * x; };
-function makeBubble() {
-    var elBubbles = document.getElementById("bubbles");
-    var x = 100*Math.random();
-    var y = 100*Math.random();
-    var r = 3*Math.random() + 1;
-    var el = document.createElement("div");
-    el.style.position = "absolute";
-    el.style.height = el.style.width = "10vmin";
-    el.style.backgroundColor = "white";
-    el.style.opacity = 0;
-    el.style.borderRadius = "50%";
-    el.style.boxShadow = "0px 0px 1.25vmin 1.25vmin white";
-    el.style.transform = el.style.webkitTransform = "translate3d(-0.5vmin, -0.5vmin, 0px) translate3d(" + x + "vw, " + y + "vh, 0px) scale(" + r + ")";
-    el.style.transition = el.style.webkitTransition = "all 20s, opacity 10s";
-    elBubbles.appendChild(el);
-    requestAnimationFrame(function() {
-        var tox = x + 10*Math.random() - 5;
-        var toy = y + 10*Math.random() - 5;
-        var tor = r + Math.random() - 0.5;
-        if(tor < 0) tor = 0; else if(tor > 25) tor = 25;
-        el.style.transform = el.style.webkitTransform = "translate3d(-0.5vmin, -0.5vmin, 0px) translate3d(" + tox + "vw, " + toy + "vh, 0px) scale(" + tor + ")";
-        el.style.opacity = 0.5 - r*tor/40;
-    });
-    setTimeout(function() {
-        el.style.opacity = 0;
-    }, 10000);
-    setTimeout(function() {
-        if(el.remove)
-            el.remove();
-        else
-            document.getElementById("bubbles").removeChild(el);
-    }, 20000);
-}
-addEventListener("load", function () {
-    if(window.requestAnimationFrame)
-        requestAnimationFrame(function () {
-            setInterval(makeBubble, 2000);
-            makeBubble();
-        });
-});
-</script>
+<script src="bubbles.js" language="javascript" type="text/javascript"></script>
 </head>
 <body>
 <div class="banner">
