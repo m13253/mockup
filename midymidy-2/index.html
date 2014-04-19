@@ -148,7 +148,10 @@ function makeBubble() {
     }, 20000);
 }
 addEventListener("load", function () {
-    setInterval(makeBubble, 1000);
+    if(window.requestAnimateFrame)
+        requestAnimateFrame(function () {
+            setInterval(makeBubble, 2000);
+        }
 });
 </script>
 </head>
