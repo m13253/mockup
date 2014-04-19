@@ -7,6 +7,7 @@ window.calcViewportMetrics = {
 };
 function makeBubble() {
     var elBubbles = document.getElementById("bubbles");
+    if(elBubbles.getElementsByClassName("bubble_item").length > 10) return false;
     var el = document.createElement("div");
     el.bubbledata = {
         'frame': -1,
@@ -28,22 +29,24 @@ function makeBubble() {
     elBubbles.appendChild(el);
     animateBubble(el);
     el.classList.add("bubble_item");
+    return true;
 }
 function animateBubble(el) {
-    if((el.bubbledata.frame += 100) > el.bubbledata.lifetime)
+    if((el.bubbledata.frame += 100) > el.bubbledata.lifetime) {
         if(el.remove)
              el.remove()
         else
              el.parentNode.removeChild(el);
-    else {
-        var frame_lifetime = el.bubbledata.frame/el.bubbledata.lifetime;
-        var x = calcViewportMetrics.vw(el.bubbledata.x+el.bubbledata.dx*frame_lifetime)-8;
-        var y = calcViewportMetrics.vh(el.bubbledata.y+el.bubbledata.dy*frame_lifetime)-8;
-        var r = calcViewportMetrics.vmin(el.bubbledata.r+el.bubbledata.dr*frame_lifetime)/16;
-        var alpha = el.bubbledata.alpha*frame_lifetime*(1-frame_lifetime)*4;
-        el.style.opacity = alpha;
-        el.style.transform = el.style.webkitTransform = "translate3d("+x+"px, "+y+"px, 0px) scale("+r+")";
+        return false;
     }
+    var frame_lifetime = el.bubbledata.frame/el.bubbledata.lifetime;
+    var x = calcViewportMetrics.vw(el.bubbledata.x+el.bubbledata.dx*frame_lifetime)-8;
+    var y = calcViewportMetrics.vh(el.bubbledata.y+el.bubbledata.dy*frame_lifetime)-8;
+    var r = calcViewportMetrics.vmin(el.bubbledata.r+el.bubbledata.dr*frame_lifetime)/16;
+    var alpha = el.bubbledata.alpha*frame_lifetime*(1-frame_lifetime)*4;
+    el.style.opacity = alpha;
+    el.style.transform = el.style.webkitTransform = "translate3d("+x+"px, "+y+"px, 0px) scale("+r+")";
+    return true;
 }
 function animateBubbles() {
     var elBubbles = document.getElementById("bubbles").getElementsByClassName("bubble_item");
