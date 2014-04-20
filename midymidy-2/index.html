@@ -87,7 +87,7 @@ body {
     background-color: rgba(255, 255, 255, 0.5);
     overflow: hidden;
     white-space: nowrap;
-    background-image: url(kbgrid.svg);
+    /* background-image: url(kbgrid.svg); */
     background-size: contain;
 }
 .descbox, .commentbox {
@@ -124,12 +124,23 @@ h2 {
 </div>
 <div class="content">
 <div class="title">
-<h1>Lorem ipsum dolor sit amet</h1>
+<h1>Jesu, Joy of Man's Desiring</h1>
 </div>
 <div class="player">
-<audio controls="controls"></audio>
+<audio id="midyplayer" controls="controls" src="BWV147.m4a" type="audio/mpeg"></audio>
+<script>
+function updateVisualize() {
+    document.getElementById("visualize_iframe").contentWindow.scrollTo(0, document.getElementById("midyplayer").currentTime*32);
+    if(window.requestAnimationFrame)
+        requestAnimationFrame(updateVisualize);
+    else
+        setTimeout(updateVisualize, 31);
+}
+setTimeout(updateVisualize, 100);
+</script>
 </div>
 <div class="visualize">
+<iframe id="visualize_iframe" src="preview.html#!BWV147.mid" style="width: 1024px; height: 100%" scrolling="no" frameborder="0"></iframe>
 </div>
 <div class="descbox">
 <h2>简介</h2>
