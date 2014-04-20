@@ -115,6 +115,14 @@ h2 {
     z-index: -1;
     overflow: hidden;
 }
+#visualize_iframe {
+    width: 1024px;
+    height: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    -webkit-transform-origin: 0% 0%;
+    transform-origin: 0% 0%;
+}
 </style>
 <script src="bubbles.js" language="javascript" type="text/javascript"></script>
 </head>
@@ -130,7 +138,9 @@ h2 {
 <audio id="midyplayer" controls="controls" src="BWV147.m4a" type="audio/mpeg"></audio>
 <script>
 function updateVisualize() {
-    document.getElementById("visualize_iframe").contentWindow.scrollTo(0, document.getElementById("midyplayer").currentTime*32);
+    var eliframe = document.getElementById("visualize_iframe");
+    eliframe.contentWindow.scrollTo(0, document.getElementById("midyplayer").currentTime*32);
+    eliframe.style.webkitTransform = eliframe.style.transform = "scale(" + calcViewportMetrics.vw(80)/1024 + ", 1)"
     if(window.requestAnimationFrame)
         requestAnimationFrame(updateVisualize);
     else
@@ -140,7 +150,7 @@ setTimeout(updateVisualize, 100);
 </script>
 </div>
 <div class="visualize">
-<iframe id="visualize_iframe" src="preview.html#!BWV147.mid" style="width: 1024px; height: 100%" scrolling="no" frameborder="0"></iframe>
+<iframe id="visualize_iframe" src="preview.html#!BWV147.mid" scrolling="no" frameborder="0"></iframe>
 </div>
 <div class="descbox">
 <h2>简介</h2>
