@@ -141,10 +141,7 @@ function updateVisualize() {
     var eliframe = document.getElementById("visualize_iframe");
     eliframe.contentWindow.scrollTo(0, document.getElementById("midyplayer").currentTime*32);
     eliframe.style.webkitTransform = eliframe.style.transform = "scale(" + calcViewportMetrics.vw(80)/1024 + ", 1)"
-    if(window.requestAnimationFrame)
-        requestAnimationFrame(updateVisualize);
-    else
-        setTimeout(updateVisualize, 31);
+    setTimeout(updateVisualize, 31);
 }
 setTimeout(updateVisualize, 100);
 </script>
