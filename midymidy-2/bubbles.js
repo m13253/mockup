@@ -15,8 +15,8 @@ function makeBubble() {
         'x': 100*Math.random(),
         'y': 100*Math.random(),
         'r': 30*Math.random()+10,
-        'dx': 10*Math.random()-5,
-        'dy': 10*Math.random()-5,
+        'dx': 20*Math.sqr(Math.random())-10,
+        'dy': 20*Math.sqr(Math.random())-10,
     };
     el.bubbledata.dr = Math.min(10*Math.random()-5, el.bubbledata.r);
     el.bubbledata.alpha = 0.5 - el.bubbledata.r*(el.bubbledata.r-el.bubbledata.dr)/4000;
