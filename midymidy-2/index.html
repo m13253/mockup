@@ -135,7 +135,10 @@ h2 {
 <h1>Jesu, Joy of Man's Desiring</h1>
 </div>
 <div class="player">
-<audio id="midyplayer" controls="controls" src="BWV147.m4a" type="audio/mpeg"></audio>
+<audio id="midyplayer" controls="controls">
+<source src="BWV147.m4a" type="audio/mp4; codec=aac" />
+<source src="BWV147.opus" type="audio/ogg; codec=opus" />
+</audio>
 <script>
 function updateVisualize() {
     var eliframe = document.getElementById("visualize_iframe");
