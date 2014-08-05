@@ -26,7 +26,7 @@ function makeBubble() {
     el.bubbledata.dr = Math.min(10*Math.random()-5, el.bubbledata.r);
     el.bubbledata.alpha = 0.5 - el.bubbledata.r*(el.bubbledata.r-el.bubbledata.dr)/4000;
 
-    el.style.position = "absolute";
+    el.style.position = "fixed";
     el.style.height = el.style.width = "16px";
     el.style.backgroundColor = "white";
     el.style.borderRadius = "50%";

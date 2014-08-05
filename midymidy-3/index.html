@@ -21,6 +21,9 @@ body {
     height: 100%;
     margin: 0px;
     padding: 0px;
+    background-color: #374850;
+    background-image: radial-gradient(ellipse at center, #6e8fa0 50%, #374850 100%);
+    background-attachment: fixed;
 }
 h1, h2, h3, h4, h5, h6 {
     font-weight: normal;
@@ -31,17 +34,12 @@ p {
 }
 #bubbles {
     position: fixed;
-    position: device-fixed;
     width: 100%;
     height: 100%;
     top: 0px;
     left: 0px;
     z-index: -1;
     overflow: hidden;
-}
-body, .background {
-    background-color: #374850;
-    background-image: radial-gradient(ellipse at center, #6e8fa0 50%, #374850 100%);
 }
 .banner {
     width: 100%;
@@ -115,6 +113,6 @@ h2 {
       </div>
     </div>
   </div>
-  <div id="bubbles" class="background"></div>
+  <div id="bubbles"></div>
 </body>
 </html>
