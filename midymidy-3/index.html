@@ -38,8 +38,8 @@ p {
     height: 100%;
     top: 0px;
     left: 0px;
-    z-index: -1;
     overflow: hidden;
+    transform: translateZ(0px);
 }
 .banner {
     width: 100%;
@@ -96,6 +96,7 @@ h2 {
 <script src="prefixfree.min.js" language="javascript" type="text/javascript"></script>
 </head>
 <body>
+  <div id="bubbles"></div>
   <div class="banner">
     <span class="logo">MidyMidy</span>
   </div>
@@ -113,6 +114,5 @@ h2 {
       </div>
     </div>
   </div>
-  <div id="bubbles"></div>
 </body>
 </html>
