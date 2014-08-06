@@ -22,8 +22,20 @@ body {
     margin: 0px;
     padding: 0px;
     background-color: #374850;
+}
+body::before { /* Fix WebKit bug http://remysharp.com/2013/06/07/insights-into-rendering-performance/ */
+    content: '';
+    display: block;
+    position: fixed;
+    z-index: -1;
+    top: 0px;
+    right: 0px;
+    bottom: 0px;
+    left: 0px;
+    background-color: #374850;
     background-image: radial-gradient(ellipse at center, #6e8fa0 50%, #374850 100%);
     background-attachment: fixed;
+    transform: translateZ(0px);
 }
 h1, h2, h3, h4, h5, h6 {
     font-weight: normal;
@@ -93,7 +105,6 @@ h2 {
 <script src="prefixfree.min.js" language="javascript" type="text/javascript"></script>
 </head>
 <body>
-  <div id="bubbles"></div>
   <div class="banner">
     <span class="logo">MidyMidy</span>
   </div>
@@ -111,5 +122,6 @@ h2 {
       </div>
     </div>
   </div>
+  <div id="bubbles"></div>
 </body>
 </html>

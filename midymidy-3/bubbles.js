@@ -15,33 +15,30 @@ function makeBubble() {
     if(elBubbles.getElementsByClassName("bubble_item").length > 8) return false;
 
     var el = document.createElement("div");
-    el.bubbledata = {
-        'x': 100*Math.random(),
-        'y': 100*Math.random()+20,
-        'r': 30*Math.random()+10,
-        'dx': 20*Math.sqr(Math.random())-10,
-        'dy': 20*Math.sqr(Math.random())-10-30,
-    };
-    el.bubbledata.dr = Math.min(10*Math.random()-5, el.bubbledata.r);
-    el.bubbledata.alpha = 0.25 - el.bubbledata.r*(el.bubbledata.r-el.bubbledata.dr)/8000;
-
     el.style.position = "fixed";
     el.style.zIndex = "-1";
     el.style.top = el.style.left = "0px";
     el.style.height = el.style.width = "64px";
     el.style.backgroundImage = "radial-gradient(ellipse at center, white 60%, rgba(255, 255, 255, 0) 70%)";
-    elBubbles.appendChild(el);
 
-    var x1 = calcViewportMetrics.vw(el.bubbledata.x);
-    var y1 = calcViewportMetrics.vh(el.bubbledata.y);
-    var r1 = calcViewportMetrics.vmin(el.bubbledata.r);
-    var x2 = calcViewportMetrics.vw(el.bubbledata.x + el.bubbledata.dx);
-    var y2 = calcViewportMetrics.vh(el.bubbledata.y + el.bubbledata.dy);
-    var r2 = calcViewportMetrics.vmin(el.bubbledata.r + el.bubbledata.dr);
-    var alpha = el.bubbledata.alpha;
+    var x = 100*Math.random();
+    var y = 100*Math.random()+20;
+    var r = 30*Math.random()+10;
+    var dx = 20*Math.sqr(Math.random())-10;
+    var dy = 20*Math.sqr(Math.random())-10-30;
+    var dr = Math.min(10*Math.random()-5, r);
+    var alpha = 0.25 - r*(r-dr)/8000;
+
+    var x1 = calcViewportMetrics.vw(x);
+    var y1 = calcViewportMetrics.vh(y);
+    var r1 = calcViewportMetrics.vmin(r);
+    var x2 = calcViewportMetrics.vw(x + dx);
+    var y2 = calcViewportMetrics.vh(y + dy);
+    var r2 = calcViewportMetrics.vmin(r + dr);
     el.style.opacity = "0";
     el.style.transform = "translate("+(x1-r1/2)+"px, "+(y1-r1/2)+"px) scale("+r1/64+") translateZ(0px)";
 
+    elBubbles.appendChild(el);
     var el_computedStyle = getComputedStyle(el);
     el_computedStyle.opacity;
     el_computedStyle.transform;
