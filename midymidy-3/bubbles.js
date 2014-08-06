@@ -19,7 +19,7 @@ function makeBubble() {
     el.style.zIndex = "-1";
     el.style.top = el.style.left = "0px";
     el.style.height = el.style.width = "64px";
-    el.style.backgroundImage = "radial-gradient(ellipse at center, white 60%, rgba(255, 255, 255, 0) 70%)";
+    el.style.backgroundImage = "radial-gradient(circle at center, white 60%, rgba(255, 255, 255, 0) 70%)";
 
     var x = 100*Math.random();
     var y = 100*Math.random()+20;
