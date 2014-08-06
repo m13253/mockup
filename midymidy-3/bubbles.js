@@ -12,7 +12,7 @@ window.calcViewportMetrics = {
 };
 function makeBubble() {
     var elBubbles = document.getElementById("bubbles");
-    if(elBubbles.getElementsByClassName("bubble_item").length > 8) return false;
+    if(elBubbles.getElementsByClassName("bubble_item").length > 10) return false;
     var el = document.createElement("div");
     el.bubbledata = {
         'frame': -1,
