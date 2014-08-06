@@ -12,55 +12,57 @@ window.calcViewportMetrics = {
 };
 function makeBubble() {
     var elBubbles = document.getElementById("bubbles");
-    if(elBubbles.getElementsByClassName("bubble_item").length > 8) return false;
-
+    if(elBubbles.getElementsByClassName("bubble_item").length > 10) return false;
     var el = document.createElement("div");
+    el.bubbledata = {
+        'frame': -1,
+        'lifetime': 20000,
+        'x': 100*Math.random(),
+        'y': 100*Math.random()+20,
+        'r': 30*Math.random()+10,
+        'dx': 20*Math.sqr(Math.random())-10,
+        'dy': 20*Math.sqr(Math.random())-10-30,
+    };
+    el.bubbledata.dr = Math.min(10*Math.random()-5, el.bubbledata.r);
+    el.bubbledata.alpha = 0.25 - el.bubbledata.r*(el.bubbledata.r-el.bubbledata.dr)/4000;
+
     el.style.position = "fixed";
     el.style.zIndex = "-1";
-    el.style.top = el.style.left = "0px";
     el.style.height = el.style.width = "64px";
     el.style.backgroundImage = "radial-gradient(circle at center, white 60%, rgba(255, 255, 255, 0) 70%)";
-
-    var x = 100*Math.random();
-    var y = 100*Math.random()+20;
-    var r = 30*Math.random()+10;
-    var dx = 20*Math.sqr(Math.random())-10;
-    var dy = 20*Math.sqr(Math.random())-10-30;
-    var dr = Math.min(10*Math.random()-5, r);
-    var alpha = 0.25 - r*(r-dr)/8000;
-
-    var x1 = calcViewportMetrics.vw(x);
-    var y1 = calcViewportMetrics.vh(y);
-    var r1 = calcViewportMetrics.vmin(r);
-    var x2 = calcViewportMetrics.vw(x + dx);
-    var y2 = calcViewportMetrics.vh(y + dy);
-    var r2 = calcViewportMetrics.vmin(r + dr);
-    el.style.opacity = "0";
-    el.style.transform = "translate("+(x1-r1/2)+"px, "+(y1-r1/2)+"px) scale("+r1/64+") translateZ(0px)";
-
     elBubbles.appendChild(el);
-    var el_computedStyle = getComputedStyle(el);
-    el_computedStyle.opacity;
-    el_computedStyle.transform;
-
-    el.style.transition = "opacity 10s ease-in, transform 20s linear";
-    el.style.opacity = alpha;
-    el.style.transform = "translate("+(x2-r2/2)+"px, "+(y2-r2/2)+"px) scale("+r2/64+") translateZ(0px)";
-
-    setTimeout(function () {
-        el.style.transition = "opacity 10s ease-out, transform 20s linear";
-        el.style.opacity = "0";
-        setTimeout(function () {
-            el.remove();
-        }, 10000);
-    }, 10000);
-
+    animateBubble(el);
     el.classList.add("bubble_item");
     return true;
+}
+function animateBubble(el) {
+    if((el.bubbledata.frame += 100) > el.bubbledata.lifetime) {
+        if(el.remove)
+             el.remove()
+        else
+             el.parentNode.removeChild(el);
+        return false;
+    }
+    var frame_lifetime = el.bubbledata.frame/el.bubbledata.lifetime;
+    var x = calcViewportMetrics.vw(el.bubbledata.x+el.bubbledata.dx*frame_lifetime);
+    var y = calcViewportMetrics.vh(el.bubbledata.y+el.bubbledata.dy*frame_lifetime);
+    var r = calcViewportMetrics.vmin(el.bubbledata.r+el.bubbledata.dr*frame_lifetime);
+    var alpha = el.bubbledata.alpha*frame_lifetime*(1-frame_lifetime)*4;
+    el.style.opacity = alpha;
+    el.style.transform = el.style.webkitTransform = "translateZ(0px) translate("+(x-r/2)+"px, "+(y-r/2)+"px) scale("+r/64+")";
+    return true;
+}
+function animateBubbles() {
+    var elBubbles = document.getElementById("bubbles").getElementsByClassName("bubble_item");
+    for(var i = 0; i < elBubbles.length; i++)
+        animateBubble(elBubbles[i]);
+    setTimeout(animateBubbles, 100)
 }
 addEventListener("load", function () {
     if(window.requestAnimationFrame)
         requestAnimationFrame(function () {
             setInterval(makeBubble, 2000);
+            makeBubble();
+            animateBubbles();
         });
 });
