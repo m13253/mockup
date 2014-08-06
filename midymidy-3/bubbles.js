@@ -36,7 +36,7 @@ function makeBubble() {
     return true;
 }
 function animateBubble(el) {
-    if((el.bubbledata.frame += 100) > el.bubbledata.lifetime) {
+    if((el.bubbledata.frame += 40) > el.bubbledata.lifetime) {
         if(el.remove)
              el.remove()
         else
@@ -56,7 +56,7 @@ function animateBubbles() {
     var elBubbles = document.getElementById("bubbles").getElementsByClassName("bubble_item");
     for(var i = 0; i < elBubbles.length; i++)
         animateBubble(elBubbles[i]);
-    setTimeout(animateBubbles, 100)
+    setTimeout(animateBubbles, 40)
 }
 addEventListener("load", function () {
     if(window.requestAnimationFrame)
