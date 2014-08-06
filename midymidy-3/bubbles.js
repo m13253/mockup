@@ -21,16 +21,15 @@ function makeBubble() {
         'y': 100*Math.random()+20,
         'r': 30*Math.random()+10,
         'dx': 20*Math.sqr(Math.random())-10,
-        'dy': 20*Math.sqr(Math.random())-10-40,
+        'dy': 20*Math.sqr(Math.random())-10-30,
     };
     el.bubbledata.dr = Math.min(10*Math.random()-5, el.bubbledata.r);
     el.bubbledata.alpha = 0.5 - el.bubbledata.r*(el.bubbledata.r-el.bubbledata.dr)/4000;
 
     el.style.position = "fixed";
-    el.style.height = el.style.width = "16px";
-    el.style.backgroundColor = "white";
-    el.style.borderRadius = "50%";
-    el.style.boxShadow = "0px 0px 2px 2px white";
+    el.style.zIndex = "-1";
+    el.style.height = el.style.width = "64px";
+    el.style.backgroundImage = "radial-gradient(ellipse at center, white 60%, rgba(255, 255, 255, 0) 70%)";
     elBubbles.appendChild(el);
     animateBubble(el);
     el.classList.add("bubble_item");
@@ -47,10 +46,10 @@ function animateBubble(el) {
     var frame_lifetime = el.bubbledata.frame/el.bubbledata.lifetime;
     var x = calcViewportMetrics.vw(el.bubbledata.x+el.bubbledata.dx*frame_lifetime)-8;
     var y = calcViewportMetrics.vh(el.bubbledata.y+el.bubbledata.dy*frame_lifetime)-8;
-    var r = calcViewportMetrics.vmin(el.bubbledata.r+el.bubbledata.dr*frame_lifetime)/16;
+    var r = calcViewportMetrics.vmin(el.bubbledata.r+el.bubbledata.dr*frame_lifetime);
     var alpha = el.bubbledata.alpha*frame_lifetime*(1-frame_lifetime)*4;
     el.style.opacity = alpha;
-    el.style.transform = el.style.webkitTransform = "translate3d("+x+"px, "+y+"px, 0px) scale("+r+")";
+    el.style.transform = el.style.webkitTransform = "translateZ(0px) translate("+(x-r/2)+"px, "+(y-r/2)+"px) scale("+r/64+")";
     return true;
 }
 function animateBubbles() {
