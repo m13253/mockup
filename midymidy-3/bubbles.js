@@ -41,7 +41,7 @@ function makeBubble(ts) {
     el.bubbledata.alpha = 0.25 - el.bubbledata.r*(el.bubbledata.r-el.bubbledata.dr)/4000;
 
     el.style.position = "fixed";
-    el.style.zIndex = "-2";
+    el.style.zIndex = "-1";
     el.style.top = el.style.left = "0px";
     el.style.height = el.style.width = "64px";
     el.style.backgroundImage = "radial-gradient(circle at center, white 60%, rgba(255, 255, 255, 0) 70%)";
