@@ -19,7 +19,7 @@ function updateVisual() {
     context.moveTo(canvas.width, 0);
     context.lineTo(0, canvas.height);
     context.stroke();
-    context.font = "12pt sans-serif";
+    context.font = 16*canvas.dataScaleFactor+"px sans-serif";
     context.textAlign = "center";
     context.textBaseline = "bottom";
     context.fillText('↓↓↓ Gaussian blur effect starts from here ↓↓↓', canvas.width/2, (stage.offsetTop+stage.clientHeight)*canvas.dataScaleFactor);
