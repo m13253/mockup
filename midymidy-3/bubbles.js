@@ -27,25 +27,32 @@ function makeBubble(ts) {
         requestDelayedAnimationFrame(makeBubble, 2000);
         return false;
     }
-    var el = document.createElement("div");
+    var el = elBubbles.getElementsByClassName("bubble_recycle")[0];
+    if(el) {
+        el.classList.remove("bubble_recycle");
+        el.style.visibility = "visible";
+    } else {
+        el = document.createElement("div");
+        el.style.position = "fixed";
+        el.style.zIndex = "-1";
+        el.style.top = el.style.left = "0px";
+        el.style.height = el.style.width = "64px";
+        el.style.backgroundImage = "radial-gradient(circle at center, white 60%, rgba(255, 255, 255, 0) 70%)";
+        elBubbles.appendChild(el);
+    }
+
     el.bubbledata = {
         'birthtime': ts,
         'lifetime': 20000,
         'x': 100*Math.random(),
         'y': 100*Math.random()+20,
-        'r': 30*Math.random()+10,
+        'r': 30*Math.random()+20,
         'dx': 20*Math.sqr(Math.random())-10,
         'dy': 20*Math.sqr(Math.random())-10-30,
     };
-    el.bubbledata.dr = Math.min(10*Math.random()-5, el.bubbledata.r);
-    el.bubbledata.alpha = 0.25 - el.bubbledata.r*(el.bubbledata.r-el.bubbledata.dr)/4000;
+    el.bubbledata.dr = Math.min(20*Math.random()-10, el.bubbledata.r);
+    el.bubbledata.alpha = Math.max(0.25 - el.bubbledata.r*(el.bubbledata.r-el.bubbledata.dr)/10000, 0.05);
 
-    el.style.position = "fixed";
-    el.style.zIndex = "-1";
-    el.style.top = el.style.left = "0px";
-    el.style.height = el.style.width = "64px";
-    el.style.backgroundImage = "radial-gradient(circle at center, white 60%, rgba(255, 255, 255, 0) 70%)";
-    elBubbles.appendChild(el);
     animateBubble(el, ts);
     el.classList.add("bubble_item");
     requestDelayedAnimationFrame(makeBubble, 2000);
@@ -53,10 +60,10 @@ function makeBubble(ts) {
 }
 function animateBubble(el, ts) {
     if(ts > el.bubbledata.birthtime + el.bubbledata.lifetime) {
-        if(el.remove)
-             el.remove()
-        else
-             el.parentNode.removeChild(el);
+        /* el.remove(); */
+        el.classList.remove("bubble_item");
+        el.classList.add("bubble_recycle");
+        el.style.visibility = "none";
         return false;
     }
     var progress = (ts-el.bubbledata.birthtime)/el.bubbledata.lifetime;
