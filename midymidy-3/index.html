@@ -17,11 +17,13 @@
                  sans-serif;
     box-sizing: border-box;
 }
-body {
+html, body {
     width: 100%;
     height: 100%;
     margin: 0px;
     padding: 0px;
+}
+body {
     background-color: #374850;
 }
 body::before { /* Fix WebKit bug http://remysharp.com/2013/06/07/insights-into-rendering-performance/ */
@@ -63,7 +65,7 @@ p {
 }
 .stage {
     width: 100%;
-    height: calc(100vh - 13rem);
+    height: calc(100% - 13rem);
     min-height: 67%;
     background-image: url(kbgrid.svg);
     background-repeat: repeat-y;
@@ -100,14 +102,21 @@ h2 {
     max-width: 90%;
     margin: 0rem auto;
 }
+#visual {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+    width: 100%;
+    height: 100%;
+}
 </style>
 </head>
 <body>
-  <div class="banner">
-    <span class="logo">MidyMidy</span>
-  </div>
-  <div class="stage">
-  </div>
+  <div><canvas id="visual"></canvas></div>
+  <div class="banner"><span class="logo">MidyMidy</span></div>
+  <div class="stage"></div>
   <div class="afterstage">
     <div class="metadata">
       <h1>Jesu, Joy of Man's Desiring</h1>
