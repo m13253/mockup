@@ -4,12 +4,12 @@
   @license AGPL version 3
 */
 (function () {
-Math.sqr = function(x) { return x*x; };
+Math.sqr = function (x) { return x*x; };
 window.calcViewportMetrics = {
-    'vw': function(x) { return x !== undefined ? document.body.clientWidth*x/100 : document.body.clientWidth/100; },
-    'vh': function(x) { return x !== undefined ? document.body.clientHeight*x/100 : document.body.clientHeight/100; },
-    'vmax': function(x) { return Math.max(this.vw(x), this.vh(x)); },
-    'vmin': function(x) { return Math.min(this.vw(x), this.vh(x)); }
+    'vw': function (x) { return document.body.clientWidth*x/100; },
+    'vh': function (x) { return document.body.clientHeight*x/100; },
+    'vmax': function (x) { return Math.max(document.body.clientWidth, document.body.clientHeight)*x/100; },
+    'vmin': function (x) { return Math.min(document.body.clientWidth, document.body.clientHeight)*x/100; }
 };
 function requestDelayedAnimationFrame(func, delay) {
     if(!window.requestAnimationFrame)
@@ -21,15 +21,17 @@ function requestDelayedAnimationFrame(func, delay) {
             requestAnimationFrame(func);
         }, delay-16);
 }
+
+var bubble_item = new Array();
+var bubble_recycle = new Array();
 function makeBubble(ts) {
-    var elBubbles = document.getElementById("bubbles");
-    if(elBubbles.getElementsByClassName("bubble_item").length > 10) {
+    if(bubble_item.length > 10) {
         requestDelayedAnimationFrame(makeBubble, 2000);
         return false;
     }
-    var el = elBubbles.getElementsByClassName("bubble_recycle")[0];
+    var elBubbles = document.getElementById("bubbles");
+    var el = bubble_recycle.pop();
     if(el) {
-        el.classList.remove("bubble_recycle");
         el.style.visibility = "visible";
     } else {
         el = document.createElement("div");
@@ -53,17 +55,16 @@ function makeBubble(ts) {
     el.bubbledata.dr = Math.min(20*Math.random()-10, el.bubbledata.r);
     el.bubbledata.alpha = Math.max(0.25 - el.bubbledata.r*(el.bubbledata.r-el.bubbledata.dr)/10000, 0.05);
 
-    animateBubble(el, ts);
-    el.classList.add("bubble_item");
+    animateBubble(bubble_item.push(el)-1, ts);
     requestDelayedAnimationFrame(makeBubble, 2000);
     return true;
 }
-function animateBubble(el, ts) {
+function animateBubble(idx, ts) {
+    var el = bubble_item[idx];
     if(ts > el.bubbledata.birthtime + el.bubbledata.lifetime) {
-        /* el.remove(); */
-        el.classList.remove("bubble_item");
-        el.classList.add("bubble_recycle");
+        bubble_item.splice(idx, 1);
         el.style.visibility = "none";
+        bubble_recycle.push(el);
         return false;
     }
     var progress = (ts-el.bubbledata.birthtime)/el.bubbledata.lifetime;
@@ -76,9 +77,8 @@ function animateBubble(el, ts) {
     return true;
 }
 function animateBubbles(ts) {
-    var elBubbles = document.getElementById("bubbles").getElementsByClassName("bubble_item");
-    for(var i = 0; i < elBubbles.length; i++)
-        animateBubble(elBubbles[i], ts);
+    for(var i = 0; i < bubble_item.length; i++)
+        animateBubble(i, ts);
     requestDelayedAnimationFrame(animateBubbles, !window.fpsstats ? 100 : 0); /* Firefox can not even run at 25fps!!! */
 }
 window.addEventListener("load", function () {
