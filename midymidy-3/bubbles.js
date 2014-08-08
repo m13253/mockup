@@ -79,7 +79,7 @@ function animateBubbles(ts) {
     var elBubbles = document.getElementById("bubbles").getElementsByClassName("bubble_item");
     for(var i = 0; i < elBubbles.length; i++)
         animateBubble(elBubbles[i], ts);
-    requestDelayedAnimationFrame(animateBubbles, 100); /* Firefox can not even run at 25fps!!! */
+    requestDelayedAnimationFrame(animateBubbles, !window.fpsstats ? 100 : 0); /* Firefox can not even run at 25fps!!! */
 }
 window.addEventListener("load", function () {
     requestDelayedAnimationFrame(function (ts) {
