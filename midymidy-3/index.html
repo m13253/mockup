@@ -70,16 +70,6 @@ p {
     width: 100%;
     height: calc(100% - 11rem);
     min-height: 67%;
-    background-image: url(kbgrid.svg);
-    background-repeat: repeat-y;
-    background-size: contain;
-    opacity: 0;
-}
-h2 {
-    margin: 0rem auto;
-    padding: 0rem 1% 0.125rem 1%;
-    font-size: 1.5rem;
-    border-bottom: solid black 1pt;
 }
 .afterstage {
     width: 100%;
@@ -87,17 +77,12 @@ h2 {
     background-image: radial-gradient(circle at top, rgba(255, 255, 255, 0.375) 0%, rgba(255, 255, 255, 0.25) 100%);
     box-shadow: 0rem -1rem 2rem -1rem rgba(0, 0, 0, 0.25);
 }
-.afterstage::after{
-    content: '';
-    display: block;
-    clear: both;
-}
 .playcontrol {
     width: 100%;
-    height: 8rem;
     margin: 0rem auto;
 }
 .playcontrol h1 {
+    font-size: 1.5rem;
     padding: 0.5rem 2rem;
 }
 .playcontrol audio {
@@ -105,7 +90,24 @@ h2 {
     width: 90%;
     margin: 0rem auto;
 }
+@media all and (max-height: 22.5em) {
+.banner {
+    height: 2rem;
+}
+.logo {
+    font-size: 1.5rem;
+    line-height: 2rem;
+}
+#stage {
+    height: calc(100% - 7rem);
+}
+.playcontrol h1 {
+    font-size: 1.25rem;
+    padding: 0.5rem 1rem;
+}
+}
 .metadata {
+    margin-top: 2rem;
     margin-left: 1rem;
     margin-right: 23rem;
 }
@@ -121,6 +123,17 @@ h2 {
     float: right;
     margin-top: 2rem;
     margin-right: 1rem;
+}
+h2 {
+    margin: 0rem auto;
+    padding: 0rem 1% 0.125rem 1%;
+    font-size: 1.5rem;
+    border-bottom: solid black 1pt;
+}
+.afterstage::after{
+    content: '';
+    display: block;
+    clear: both;
 }
 @media not all and (min-width: 50em) {
 .metadata {
