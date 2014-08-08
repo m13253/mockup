@@ -4,19 +4,15 @@
   @license AGPL version 3
 */
 (function () {
-var TOP_HEIGHT = 3*16;
-var BOTTOM_HEIGHT = 8*16;
-var visualRequestAnimationFrame = window.requestAnimationFrame || window.webkitRequestAnimationFrame || function (func) {
-    return setTimeout(func, 16);
-};
+var visualRequestAnimationFrame = window.requestAnimationFrame || window.webkitRequestAnimationFrame || function (func) { return setTimeout(func, 16); };
 var bgimg = new Image();
 function updateVisual() {
     var canvas = document.getElementById("visual");
     var context = canvas.getContext("2d");
+    var stage = document.getElementById("stage");
     context.clearRect(0, 0, canvas.width, canvas.height);
-    context.globalAlpha = 0.5;
-    context.drawImage(bgimg, 0, TOP_HEIGHT, canvas.width, document.body.clientHeight-TOP_HEIGHT-BOTTOM_HEIGHT);
-    context.globalAlpha = 1;
+    if(bgimg.loaded)
+        context.drawImage(bgimg, 0, stage.offsetTop, canvas.width, stage.clientHeight);
     context.beginPath();
     context.moveTo(0, 0);
     context.lineTo(canvas.width, canvas.height);
@@ -26,7 +22,7 @@ function updateVisual() {
     context.font = "12pt sans-serif";
     context.textAlign = "center";
     context.textBaseline = "bottom";
-    context.fillText('↓↓↓ Gaussian blur effect starts from here ↓↓↓', canvas.width/2, document.body.clientHeight-BOTTOM_HEIGHT);
+    context.fillText('↓↓↓ Gaussian blur effect starts from here ↓↓↓', canvas.width/2, stage.offsetTop+stage.clientHeight);
 }
 window.addEventListener("load", function () {
     var visual = document.getElementById("visual");
@@ -39,7 +35,7 @@ window.addEventListener("load", function () {
     window.addEventListener("resize", resizefunc);
     resizefunc();
     visualRequestAnimationFrame(updateVisual);
-    bgimg.addEventListener("load", updateVisual);
+    bgimg.addEventListener("load", function () { this.loaded = true; updateVisual(); });
     bgimg.src = "kbgrid.svg";
 });
 }());

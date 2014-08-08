@@ -4,7 +4,7 @@
     xmlns="http://www.w3.org/2000/svg" version="1.1"
     xmlns:xlink="http://www.w3.org/1999/xlink"
     width="1024" height="16">
-  <g id="kb_octave">
+  <g id="kb_octave" opacity="0.5">
    <g fill="#000000" fill-opacity="0.2" stroke="none" stroke-width="0">
      <rect x="8.5" y="0" width="7" height="16" />
      <rect x="24.5" y="0" width="7" height="16" />
