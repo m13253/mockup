@@ -3,6 +3,7 @@
   @author StarBrilliant <m13253@hotmail.com>
   @license AGPL version 3
 */
+(function () {
 Math.sqr = function(x) { return x*x; };
 window.calcViewportMetrics = {
     'vw': function(x) { return x !== undefined ? document.body.clientWidth*x/100 : document.body.clientWidth/100; },
@@ -79,3 +80,4 @@ window.addEventListener("load", function () {
         animateBubbles(ts);
     }, 100);
 });
+}());
