@@ -27,6 +27,7 @@ body {
     background-color: #374850;
     font-size: 16px;
 }
+@media all and (color) {
 body::before { /* Fix WebKit bug http://remysharp.com/2013/06/07/insights-into-rendering-performance/ */
     content: '';
     display: block;
@@ -40,6 +41,7 @@ body::before { /* Fix WebKit bug http://remysharp.com/2013/06/07/insights-into-r
     background-image: radial-gradient(ellipse at center, #6e8fa0 50%, #526b78 85%, #374850 100%);
     background-attachment: fixed;
     transform: translateZ(0px);
+}
 }
 h1, h2, h3, h4, h5, h6 {
     font-weight: normal;
@@ -104,36 +106,36 @@ h2 {
     margin: 0rem auto;
 }
 .metadata {
-    margin-left: 2rem;
-    margin-right: 24rem;
+    margin-left: 1rem;
+    margin-right: 23rem;
 }
 .comments {
     display: inline-block;
-    width: calc(100% - 26rem);
+    width: calc(100% - 24rem);
     margin-top: 2rem;
-    margin-left: 2rem;
+    margin-left: 1rem;
 }
 .recommends {
     display: inline-block;
     width: 20rem;
     float: right;
     margin-top: 2rem;
-    margin-right: 2rem;
+    margin-right: 1rem;
 }
-@media all and (max-width: 40rem) {
+@media not all and (min-width: 50rem) {
 .metadata {
-    margin-right: 2rem;
+    margin-right: 1rem;
 }
 .comments {
     display: block;
     width: auto;
-    margin-right: 2rem;
+    margin-right: 1rem;
 }
 .recommends {
     display: block;
     width: auto;
     float: none;
-    margin-left: 2rem;
+    margin-left: 1rem;
 }
 }
 #visual {

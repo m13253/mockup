@@ -12,7 +12,7 @@ function updateVisual() {
     var stage = document.getElementById("stage");
     context.clearRect(0, 0, canvas.width, canvas.height);
     if(bgimg.loaded)
-        context.drawImage(bgimg, 0, stage.offsetTop, canvas.width, stage.clientHeight);
+        context.drawImage(bgimg, 0, stage.offsetTop*canvas.dataScaleFactor, canvas.width, stage.clientHeight*canvas.dataScaleFactor);
     context.beginPath();
     context.moveTo(0, 0);
     context.lineTo(canvas.width, canvas.height);
@@ -22,14 +22,22 @@ function updateVisual() {
     context.font = "12pt sans-serif";
     context.textAlign = "center";
     context.textBaseline = "bottom";
-    context.fillText('↓↓↓ Gaussian blur effect starts from here ↓↓↓', canvas.width/2, stage.offsetTop+stage.clientHeight);
+    context.fillText('↓↓↓ Gaussian blur effect starts from here ↓↓↓', canvas.width/2, (stage.offsetTop+stage.clientHeight)*canvas.dataScaleFactor);
+}
+function getCanvasPixelRatio(el) {
+    var context = el.getContext("2d");
+    var devicePixelRatio = window.devicePixelRatio || 1;
+    var backingStorePixelRatio = window.backingStorePixelRatio || context.webkitBackingStorePixelRatio || 1;
+    return devicePixelRatio/backingStorePixelRatio;
 }
 window.addEventListener("load", function () {
     var visual = document.getElementById("visual");
     var pagefoot = document.getElementById("pagefoot");
     var resizefunc = function () {
-        visual.width = document.body.clientWidth;
-        visual.style.height = (visual.height = pagefoot.offsetTop) + "px";
+        visual.dataScaleFactor = getCanvasPixelRatio(visual);
+        visual.width = document.body.clientWidth * visual.dataScaleFactor;
+        visual.height = pagefoot.offsetTop * visual.dataScaleFactor;
+        visual.style.height = pagefoot.offsetTop + "px";
         updateVisual();
     };
     window.addEventListener("resize", resizefunc);
