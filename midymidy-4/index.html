@@ -190,27 +190,5 @@ h2 {
   <div><canvas id="visual" /></canvas><script src="visual.js" language="javascript" type="text/javascript"></script></div>
   <div id="pagefoot"><!-- Helps set canvas height --></div>
   <script src="stats.min.js" language="javascript" type="text/javascript" async></script>
-  <script language="javascript" type="text/javascript">
-      window.fpsmeter = function () {
-          window.fpsmeter = function () {};
-          window.fpsstats = null;
-          var iterfunc = function () {
-              if(!fpsstats && window.Stats) {
-                  fpsstats = new Stats();
-                  fpsstats.domElement.style.position = "fixed";
-                  fpsstats.domElement.style.top = fpsstats.domElement.style.right = "0px";
-                  fpsstats.domElement.style.zIndex = "2";
-                  document.body.appendChild(fpsstats.domElement);
-              }
-              if(fpsstats) {
-                  fpsstats.update();
-              }
-              requestAnimationFrame(iterfunc);
-          };
-          if(window.requestAnimationFrame)
-              requestAnimationFrame(iterfunc);
-      };
-      fpsmeter();
-  </script>
 </body>
 </html>
