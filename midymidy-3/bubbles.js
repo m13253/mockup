@@ -10,12 +10,25 @@ window.calcViewportMetrics = {
     'vmax': function(x) { return Math.max(this.vw(x), this.vh(x)); },
     'vmin': function(x) { return Math.min(this.vw(x), this.vh(x)); }
 };
-function makeBubble() {
+function requestDelayedAnimationFrame(func, delay) {
+    if(!window.requestAnimationFrame)
+        return false;
+    if(delay < 17)
+        return requestAnimationFrame(func);
+    else
+        return setTimeout(function () {
+            requestAnimationFrame(func);
+        }, delay-16);
+}
+function makeBubble(ts) {
     var elBubbles = document.getElementById("bubbles");
-    if(elBubbles.getElementsByClassName("bubble_item").length > 10) return false;
+    if(elBubbles.getElementsByClassName("bubble_item").length > 10) {
+        requestDelayedAnimationFrame(makeBubble, 2000);
+        return false;
+    }
     var el = document.createElement("div");
     el.bubbledata = {
-        'frame': -1,
+        'birthtime': ts,
         'lifetime': 20000,
         'x': 100*Math.random(),
         'y': 100*Math.random()+20,
@@ -32,38 +45,37 @@ function makeBubble() {
     el.style.height = el.style.width = "64px";
     el.style.backgroundImage = "radial-gradient(circle at center, white 60%, rgba(255, 255, 255, 0) 70%)";
     elBubbles.appendChild(el);
-    animateBubble(el);
+    animateBubble(el, ts);
     el.classList.add("bubble_item");
+    requestDelayedAnimationFrame(makeBubble, 2000);
     return true;
 }
-function animateBubble(el) {
-    if((el.bubbledata.frame += 100) > el.bubbledata.lifetime) {
+function animateBubble(el, ts) {
+    if(ts > el.bubbledata.birthtime + el.bubbledata.lifetime) {
         if(el.remove)
              el.remove()
         else
              el.parentNode.removeChild(el);
         return false;
     }
-    var frame_lifetime = el.bubbledata.frame/el.bubbledata.lifetime;
-    var x = calcViewportMetrics.vw(el.bubbledata.x+el.bubbledata.dx*frame_lifetime);
-    var y = calcViewportMetrics.vh(el.bubbledata.y+el.bubbledata.dy*frame_lifetime);
-    var r = calcViewportMetrics.vmin(el.bubbledata.r+el.bubbledata.dr*frame_lifetime);
-    var alpha = el.bubbledata.alpha*frame_lifetime*(1-frame_lifetime)*4;
+    var progress = (ts-el.bubbledata.birthtime)/el.bubbledata.lifetime;
+    var x = calcViewportMetrics.vw(el.bubbledata.x+el.bubbledata.dx*progress);
+    var y = calcViewportMetrics.vh(el.bubbledata.y+el.bubbledata.dy*progress);
+    var r = calcViewportMetrics.vmin(el.bubbledata.r+el.bubbledata.dr*progress);
+    var alpha = el.bubbledata.alpha*progress*(1-progress)*4;
     el.style.opacity = alpha;
     el.style.transform = el.style.webkitTransform = "translate("+(x-r/2)+"px, "+(y-r/2)+"px) scale("+r/64+") translateZ(0px)";
     return true;
 }
-function animateBubbles() {
+function animateBubbles(ts) {
     var elBubbles = document.getElementById("bubbles").getElementsByClassName("bubble_item");
     for(var i = 0; i < elBubbles.length; i++)
-        animateBubble(elBubbles[i]);
-    setTimeout(animateBubbles, 100); /* Firefox can not even run at 25fps!!! */
+        animateBubble(elBubbles[i], ts);
+    requestDelayedAnimationFrame(animateBubbles, 100); /* Firefox can not even run at 25fps!!! */
 }
 addEventListener("load", function () {
-    if(window.requestAnimationFrame)
-        requestAnimationFrame(function () {
-            setInterval(makeBubble, 2000);
-            makeBubble();
-            animateBubbles();
-        });
+    requestDelayedAnimationFrame(function (ts) {
+        makeBubble(ts);
+        animateBubbles(ts);
+    }, 100);
 });
