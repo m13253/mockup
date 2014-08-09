@@ -11,19 +11,6 @@ function updateVisual() {
     var stage = document.getElementById("stage");
     context.clearRect(0, 0, canvas.width, canvas.height);
     drawKbgrid(canvas, context, stage);
-    context.lineWidth = 1;
-    context.strokeStyle = "rgba(0, 0, 0, 0.5)";
-    context.beginPath();
-    context.moveTo(0, 0);
-    context.lineTo(canvas.width, canvas.height);
-    context.moveTo(canvas.width, 0);
-    context.lineTo(0, canvas.height);
-    context.stroke();
-    context.font = 16*canvas.dataScaleFactor+"px sans-serif";
-    context.textAlign = "center";
-    context.textBaseline = "bottom";
-    context.fillStyle = "black";
-    context.fillText("↓↓↓ Gaussian blur effect starts from here ↓↓↓", canvas.width/2, (stage.offsetTop+stage.clientHeight)*canvas.dataScaleFactor);
 }
 function drawKbgrid(canvas, context, stage) {
     if(canvas.width < 480)
