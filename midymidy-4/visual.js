@@ -25,7 +25,7 @@ window.resumeVisual = function () {
     var iterfunc = function () {
         if(visualPaused)
             return;
-        updateVisual();
+        paintVisual();
         visualRequestAnimationFrame(iterfunc);
     };
     visualRequestAnimationFrame(iterfunc);
@@ -33,6 +33,10 @@ window.resumeVisual = function () {
 window.pauseVisual = function () {
     visualPaused = true;
 };
+window.refreshVisual = function () {
+    if(!visualPaused)
+        paintVisual;
+}
 var midiData;
 window.startVisual = function (url) {
     document.getElementById("progressline").style.width = undefined;
@@ -42,7 +46,7 @@ window.startVisual = function (url) {
     loadMidi(url,
         function (midiData_) { /* onload */
             submitMidiData(midiData_);
-            updateVisual();
+            paintVisual();
         },
         function () { /* onerror */
             document.getElementById("progressline").style.width = "100%";
@@ -63,7 +67,7 @@ window.startVisual = function (url) {
         }
     );
 }
-function updateVisual() {
+function paintVisual() {
     var canvas = document.getElementById("visual");
     var context = canvas.getContext("2d");
     var stage = document.getElementById("stage");
@@ -165,13 +169,13 @@ window.addEventListener("load", function () {
         visual.width = document.body.clientWidth * visual.dataScaleFactor;
         visual.height = pagefoot.offsetTop * visual.dataScaleFactor;
         visual.style.height = pagefoot.offsetTop + "px";
-        updateVisual();
+        paintVisual();
     };
     window.addEventListener("resize", resizefunc);
     resizefunc();
     var player = document.getElementById("player");
     player.addEventListener("play", resumeVisual);
     player.addEventListener("pause", pauseVisual);
-    player.addEventListener("timeupdate", updateVisual);
+    player.addEventListener("timeupdate", refreshVisual);
 });
 }());
