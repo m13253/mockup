@@ -61,13 +61,13 @@ function makeBubble(ts) {
 }
 function animateBubble(idx, ts) {
     var el = bubble_item[idx];
-    if(ts > el.bubbledata.birthtime + el.bubbledata.lifetime) {
+    var progress = (ts-el.bubbledata.birthtime)/el.bubbledata.lifetime;
+    if(progress > 1) {
         bubble_item.splice(idx, 1);
-        el.style.visibility = "none";
+        el.style.visibility = "hidden";
         bubble_recycle.push(el);
         return false;
     }
-    var progress = (ts-el.bubbledata.birthtime)/el.bubbledata.lifetime;
     var x = calcViewportMetrics.vw(el.bubbledata.x+el.bubbledata.dx*progress);
     var y = calcViewportMetrics.vh(el.bubbledata.y+el.bubbledata.dy*progress);
     var r = calcViewportMetrics.vmin(el.bubbledata.r+el.bubbledata.dr*progress);
@@ -78,7 +78,8 @@ function animateBubble(idx, ts) {
 }
 function animateBubbles(ts) {
     for(var i = 0; i < bubble_item.length; i++)
-        animateBubble(i, ts);
+        if(!animateBubble(i, ts))
+            i--;
     requestDelayedAnimationFrame(animateBubbles, 100); /* Firefox can not even run at 25fps!!! */
 }
 window.addEventListener("load", function () {
