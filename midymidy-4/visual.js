@@ -5,14 +5,14 @@
 */
 (function () {
 var channel_color = [
-    "rgba(255,  51,  51, 0.75)", "rgba(255, 255,  51, 0.75)",
-    "rgba(102, 255,  51, 0.75)", "rgba(255, 102, 153, 0.75)",
-    "rgba(102,   0, 102, 0.75)", "rgba(  0, 204, 255, 0.75)",
-    "rgba(153,  51,  51, 0.75)", "rgba( 51,  51,   0, 0.75)",
-    "rgba(204,  51,   0, 0.75)", "rgba(  0,   0,   0, 0.75)", 
-    "rgba(  0,  51, 102, 0.75)", "rgba(255,  51, 204, 0.75)",
-    "rgba(153, 153, 102, 0.75)", "rgba(153,   0,   0, 0.75)",
-    "rgba(  0,  51,   0, 0.75)", "rgba(102, 102, 255, 0.75)"
+    "rgb(255,  51,  51)", "rgb(255, 255,  51)",
+    "rgb(102, 255,  51)", "rgb(255, 102, 153)",
+    "rgb(102,   0, 102)", "rgb(  0, 204, 255)",
+    "rgb(153,  51,  51)", "rgb( 51,  51,   0)",
+    "rgb(204,  51,   0)", "rgb(  0,   0,   0)", 
+    "rgb(  0,  51, 102)", "rgb(255,  51, 204)",
+    "rgb(153, 153, 102)", "rgb(153,   0,   0)",
+    "rgb(  0,  51,   0)", "rgb(102, 102, 255)"
 ];
 var channel_order = [15, 14, 13, 12, 11, 10, 8, 7, 6, 5, 4, 3, 2, 1, 0, 9];
 var flowSpeed = 64;
@@ -81,7 +81,8 @@ function drawKbgrid(canvas, context, stage) {
     var offset = stage.offsetTop*canvas.dataScaleFactor;
     var height = stage.clientHeight*canvas.dataScaleFactor;
     context.beginPath();
-    context.fillStyle = "rgba(0, 0, 0, 0.1)";
+    context.globalAlpha = 0.1;
+    context.fillStyle = "black";
     for(var i = 1/16; i < 128; i += 12) {
         context.rect(canvas.width*(i+1)/128, offset, canvas.width*0.875/128, height);
         context.rect(canvas.width*(i+3)/128, offset, canvas.width*0.875/128, height);
@@ -92,14 +93,14 @@ function drawKbgrid(canvas, context, stage) {
     context.fill();
     context.beginPath();
     context.lineWidth = canvas.width/1024;
-    context.strokeStyle = "rgba(0, 0, 0, 0.5)"
+    context.globalAlpha = 0.5;
     for(var i = 12; i < 128; i += 12) {
         context.moveTo(canvas.width*i/128, offset);
         context.lineTo(canvas.width*i/128, offset+height);
     }
     context.stroke();
     context.beginPath();
-    context.strokeStyle = "rgba(0, 0, 0, 0.25)"
+    context.globalAlpha = 0.25;
     for(var i = 0; i < 128; i += 12)
         for(var j = i; j < i+12; j++) {
             context.moveTo(canvas.width*j/128, offset);
@@ -125,9 +126,10 @@ function drawNote(canvas, context, stage) {
 function drawNoteRect(canvas, context, timestamp, progresspos, stagestart, stageend, mainarea) {
     var starttime  = timestamp+(stagestart-progresspos)/flowSpeed;
     var endtime    = timestamp+(stageend-progresspos)/flowSpeed;
-    var startslice = Math.floor(starttime/midiData.slicelen);
+    var startslice = Math.max(Math.floor(starttime/midiData.slicelen), 0);
     var endslice   = Math.ceil(endtime/midiData.slicelen);
     var nonce = getNonce();
+    context.globalAlpha = 0.75;
     for(var channel_index = 0; channel_index < 16; channel_index++) {
         var channel = channel_order[channel_index];
         if(!midiData.timeslice[channel])
@@ -135,16 +137,15 @@ function drawNoteRect(canvas, context, timestamp, progresspos, stagestart, stage
         context.beginPath();
         context.fillStyle = channel_color[channel];
         for(slice = startslice; slice <= endslice; slice++)
-            for(var idx in midiData.timeslice[channel][slice]) {
-                var note = midiData.timeslice[channel][slice][idx];
-                if(note.flag == nonce)
-                    continue;
-                else {
-                    note.flag = nonce;
-                    if(note.end > starttime || note.start < endtime)
-                        context.rect(canvas.width*note.note/128, progresspos+(note.start-timestamp)*flowSpeed, canvas.width/128, (note.end-note.start)*flowSpeed);
+            if(midiData.timeslice[channel][slice])
+                for(var idx = 0; idx < midiData.timeslice[channel][slice].length; idx++) {
+                    var note = midiData.timeslice[channel][slice][idx];
+                    if(note.flag != nonce) {
+                        note.flag = nonce;
+                        if((note.end > starttime || note.start < endtime) && (note.end-note.start >= 1/flowSpeed))
+                            context.rect(canvas.width*note.note/128, progresspos+(note.start-timestamp)*flowSpeed, canvas.width/128, (note.end-note.start)*flowSpeed);
+                    }
                 }
-            }
         context.fill();
     }
 }

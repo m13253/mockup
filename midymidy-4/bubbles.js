@@ -31,9 +31,7 @@ function makeBubble(ts) {
     }
     var elBubbles = document.getElementById("bubbles");
     var el = bubble_recycle.pop();
-    if(el) {
-        el.style.visibility = "visible";
-    } else {
+    if(!el) {
         el = document.createElement("div");
         el.style.position = "fixed";
         el.style.zIndex = "-1";
@@ -49,8 +47,10 @@ function makeBubble(ts) {
         "x": 100*Math.random(),
         "y": 100*Math.random()+20,
         "r": 30*Math.random()+20,
+        "dr": undefined,
         "dx": 20*Math.sqr(Math.random())-10,
         "dy": 20*Math.sqr(Math.random())-10-30,
+        "alpha": undefined
     };
     el.bubbledata.dr = Math.min(20*Math.random()-10, el.bubbledata.r);
     el.bubbledata.alpha = Math.max(0.25 - el.bubbledata.r*(el.bubbledata.r-el.bubbledata.dr)/10000, 0.05);
@@ -64,7 +64,7 @@ function animateBubble(idx, ts) {
     var progress = (ts-el.bubbledata.birthtime)/el.bubbledata.lifetime;
     if(progress > 1) {
         bubble_item.splice(idx, 1);
-        el.style.visibility = "hidden";
+        el.style.opacity = "0";
         bubble_recycle.push(el);
         return false;
     }
@@ -77,9 +77,8 @@ function animateBubble(idx, ts) {
     return true;
 }
 function animateBubbles(ts) {
-    for(var i = 0; i < bubble_item.length; i++)
-        if(!animateBubble(i, ts))
-            i--;
+    for(var i = 0; i < bubble_item.length; animateBubble(i, ts) && i++)
+        ;
     requestDelayedAnimationFrame(animateBubbles, 100); /* Firefox can not even run at 25fps!!! */
 }
 window.addEventListener("load", function () {
