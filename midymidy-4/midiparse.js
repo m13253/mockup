@@ -30,7 +30,7 @@ window.loadMidi = function (url, onload, onerror, onprogress, onxhrready) {
 var midiData;
 function initMidiParse() {
     midiData = {};
-    midiData.timeslice = new Array();
+    midiData.timeslice = new Array(16);
     midiData.slicelen = 5;
     midiData.pending = {
         "setNote": function (channel, note, data) { this[(channel<<8) | note] = data; },
@@ -176,9 +176,11 @@ function noteoff(time, channel, note, vel) {
     var slice    = Math.floor(noteData.start/midiData.slicelen);
     var sliceend = Math.ceil(time/midiData.slicelen);
     for(; slice <= sliceend; slice++) {
-        if(!midiData.timeslice[slice])
-            midiData.timeslice[slice] = new Array();
-        midiData.timeslice[slice].push(noteData);
+        if(!midiData.timeslice[channel])
+            midiData.timeslice[channel] = new Array();
+        if(!midiData.timeslice[channel][slice])
+            midiData.timeslice[channel][slice] = new Array();
+        midiData.timeslice[channel][slice].push(noteData);
     }
 }
 function closeRemainingNotes() {
