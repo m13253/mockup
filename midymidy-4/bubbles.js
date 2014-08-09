@@ -1,7 +1,7 @@
 /*!
   @file bubbles.js
   @author StarBrilliant <m13253@hotmail.com>
-  @license AGPL version 3
+  @license Commercial
 */
 (function () {
 Math.sqr = function (x) { return x*x; };

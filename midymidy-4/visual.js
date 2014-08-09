@@ -1,7 +1,7 @@
 /*!
   @file bubbles.js
   @author StarBrilliant <m13253@hotmail.com>
-  @license AGPL version 3
+  @license Commercial
 */
 (function () {
 var visualRequestAnimationFrame = window.requestAnimationFrame || window.webkitRequestAnimationFrame || function (func) { return setTimeout(func, 16); };
