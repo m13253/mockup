@@ -177,5 +177,6 @@ window.addEventListener("load", function () {
     player.addEventListener("play", resumeVisual);
     player.addEventListener("pause", pauseVisual);
     player.addEventListener("timeupdate", refreshVisual);
+    player.addEventListener("seeking", refreshVisual);
 });
 }());
