@@ -5,190 +5,15 @@
 <title>MidyMidy (Mockup)</title>
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<script src="prefixfree.min.js" language="javascript" type="text/javascript"></script>
-<style>
-* {
-    text-rendering: geometricPrecision;
-    font-family: "Lucida Grande", "Lucida Sans Unicode", "Open Sans",
-                 "Helvetica Neue", Helvetica, "Nimbus Sans L", Arial,
-                 "Heiti SC", "Source Han Sans CN", "Source Han Sans", "Microsoft Yahei",
-                 sans-serif;
-    box-sizing: border-box;
-}
-html, body {
-    width: 100%;
-    height: 100%;
-    margin: 0px;
-    padding: 0px;
-}
-body {
-    background-color: #374850;
-    font-size: 16px;
-}
-@media all and (color) {
-body::before { /* Fix WebKit bug http://remysharp.com/2013/06/07/insights-into-rendering-performance/ */
-    content: '';
-    display: block;
-    position: fixed;
-    z-index: -1;
-    top: 0px;
-    right: 0px;
-    bottom: 0px;
-    left: 0px;
-    background-color: #6e8fa0;
-    background-image: -webkit-radial-gradient(center, ellipse cover, #6e8fa0 50%, #526b78 85%, #374850 100%);
-    background-image: radial-gradient(ellipse at center, #6e8fa0 50%, #526b78 85%, #374850 100%);
-    background-attachment: fixed;
-    transform: translateZ(0px);
-}
-}
-h1, h2, h3, h4, h5, h6 {
-    font-weight: normal;
-    margin: 0px;
-}
-p {
-    margin: 0px;
-}
-#bubbles {
-    position: absolute;
-    top: 0px;
-    left: 0px;
-}
-.banner {
-    width: 100%;
-    height: 3rem;
-    background-image: -webkit-linear-gradient(top, rgba(240, 255, 240, 0.9059) 0%, rgba(255, 255, 255, 0.9686) 100%);
-    background-image: linear-gradient(to bottom, rgba(240, 255, 240, 0.9059) 0%, rgba(255, 255, 255, 0.9686) 100%);
-    box-shadow: 0rem 1rem 2rem -1rem rgba(0, 0, 0, 0.25);
-}
-.logo {
-    font-size: 2rem;
-    line-height: 3rem;
-    margin-left: 1rem;
-}
-#stage {
-    width: 100%;
-    height: calc(100% - 11rem);
-    min-height: 67%;
-}
-#progressline {
-    position: relative;
-    top: 20%;
-    width: 0%;
-    height: 0.25rem;
-    margin-left: auto;
-    margin-right: auto;
-    background-image: -webkit-linear-gradient(top, rgba(100, 149, 237, 0) 0%, rgba(100, 149, 237, 0.5) 37.5%, #6495ed 50%, rgba(100, 149, 237, 0.5) 62.5%, rgba(100, 149, 237, 0) 100%);
-    background-image: linear-gradient(to bottom, rgba(100, 149, 237, 0) 0%, rgba(100, 149, 237, 0.25) 25%, #6495ed 50%, rgba(100, 149, 237, 0.25) 75%, rgba(100, 149, 237, 0) 100%);
-    transition: width 0.2s linear;
-}
-#progresserror {
-    position: relative;
-    top: 20%;
-    visibility: hidden;
-    text-align: center;
-    font-size: 1.5rem;
-    color: darkred;
-}
-.afterstage {
-    width: 100%;
-    padding-bottom: 2rem;
-    background-image: -webkit-radial-gradient(top, circle closest-corner, rgba(255, 255, 255, 0.375) 0%, rgba(255, 255, 255, 0.25) 100%);
-    background-image: radial-gradient(circle closest-corner at top, rgba(255, 255, 255, 0.375) 0%, rgba(255, 255, 255, 0.25) 100%);
-    box-shadow: 0rem -1rem 2rem -1rem rgba(0, 0, 0, 0.25);
-}
-.playcontrol {
-    width: 100%;
-    margin: 0rem auto;
-}
-.playcontrol h1 {
-    font-size: 1.5rem;
-    padding: 0.5rem 2rem;
-}
-.playcontrol audio {
-    display: block;
-    width: 90%;
-    margin: 0rem auto;
-}
-@media all and (max-height: 22.5em) {
-.banner {
-    height: 2rem;
-}
-.logo {
-    font-size: 1.5rem;
-    line-height: 2rem;
-}
-#stage {
-    height: calc(100% - 7rem);
-}
-.playcontrol h1 {
-    font-size: 1.25rem;
-    padding: 0.5rem 1rem;
-}
-}
-.metadata {
-    margin-top: 2rem;
-    margin-left: 1rem;
-    margin-right: 23rem;
-}
-.comments {
-    display: inline-block;
-    width: calc(100% - 24rem);
-    margin-top: 2rem;
-    margin-left: 1rem;
-}
-.recommends {
-    display: inline-block;
-    width: 20rem;
-    float: right;
-    margin-top: 2rem;
-    margin-right: 1rem;
-}
-h2 {
-    margin: 0rem auto;
-    padding: 0rem 1% 0.125rem 1%;
-    font-size: 1.5rem;
-    border-bottom: solid black 1pt;
-}
-.afterstage::after{
-    content: '';
-    display: block;
-    clear: both;
-}
-@media not all and (min-width: 50em) {
-.metadata {
-    margin-right: 1rem;
-}
-.comments {
-    display: block;
-    width: auto;
-    margin-right: 1rem;
-}
-.recommends {
-    display: block;
-    width: auto;
-    float: none;
-    margin-left: 1rem;
-}
-}
-#visual {
-    position: absolute;
-    top: 0px;
-    left: 0px;
-    width: 100%;
-    z-index: -1;
-}
-#pagefoot {
-    height: 0px;
-}
-</style>
+<link rel="stylesheet" href="styles.css" type="text/css" />
+<script src="prefixfree.min.js" language="javascript"></script>
 </head>
 <body>
-  <div class="banner"><span class="logo">MidyMidy</span></div>
+  <div class="banner"><span class="logo">MidyMidy (Mockup Demo)</span></div>
   <div id="stage"><div id="progressline"></div><div id="progresserror">发生了错误</div></div>
   <div class="afterstage">
     <div class="playcontrol">
-      <h1>Jesu, Joy of Man's Desiring (播放组件还没有做好呢 :-)</h1>
+      <h1>Kanon - Kazewo matta hi</h1>
       <div><audio id="player" controls="controls">
         <source src="media.m4a" type="audio/mp4; codec=aac" />
         <source src="media.opus" type="audio/ogg; codec=opus" />
@@ -200,7 +25,7 @@ h2 {
     </div>
     <div class="recommends">
       <h2>相关推荐</h2>
-      <div><p>Clare de Lune</p></div>
+      <div><p>Chiisana te no hira</p></div>
     </div>
     <div class="comments">
       <h2>评论</h2>
