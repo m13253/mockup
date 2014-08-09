@@ -82,6 +82,14 @@ p {
     box-shadow: 0rem 0rem 0.125rem 0rem #6495ed;
     transition: width 0.2s linear;
 }
+#progresserror {
+    position: relative;
+    top: 33%;
+    margin-left: auto;
+    margin-right: auto;
+    visibility: hidden;
+    color: darkred;
+}
 .afterstage {
     width: 100%;
     padding-bottom: 2rem;
@@ -177,7 +185,7 @@ h2 {
 </head>
 <body>
   <div class="banner"><span class="logo">MidyMidy</span></div>
-  <div id="stage"><div id="progressline"></div></div>
+  <div id="stage"><div id="progressline"></div><div id="progresserror">发生了错误</div></div>
   <div class="afterstage">
     <div class="playcontrol">
       <h1>Jesu, Joy of Man's Desiring (播放组件还没有做好呢 :-)</h1>

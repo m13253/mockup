@@ -14,14 +14,21 @@ var channel_color = [
     "rgba(255,  51, 204, 0.8)", "rgba(153, 153, 102, 0.8)",
     "rgba(153,   0,   0, 0.8)", "rgba(  0,  51,   0, 0.8)"
 ];
+var midiData;
 window.startVisual = function (url) {
+    document.getElementById("progressline").style.width = undefined;
+    document.getElementById("progressline").style.backgroundColor = undefined;
+    document.getElementById("progressline").style.boxShadow = undefined;
+    document.getElementById("progresserror").style.visibility = undefined;
     loadMidi(url,
-    function () { /* onload */
+    function (midiData_) { /* onload */
+        submitMidiData(midiData_);
     },
     function () { /* onerror */
         document.getElementById("progressline").style.width = "100%";
         document.getElementById("progressline").style.backgroundColor = "darkred";
         document.getElementById("progressline").style.boxShadow = "0rem 0rem 0.125rem 0rem darkred";
+        document.getElementById("progresserror").style.visibility = "visible";
     },
     function (e) { /* onprogress */
         document.getElementById("progressline").style.width = 50+50*e.loaded/e.total+"%";
@@ -73,6 +80,9 @@ function drawKbgrid(canvas, context, stage) {
             context.lineTo(canvas.width*j/128, offset+height);
         }
     context.stroke();
+}
+function submitMidiData(midiData_) {
+    midiData = midiData_;
 }
 lastNonce = 0;
 function getNonce() {
