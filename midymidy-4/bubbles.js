@@ -6,10 +6,10 @@
 (function () {
 Math.sqr = function (x) { return x*x; };
 window.calcViewportMetrics = {
-    'vw': function (x) { return document.body.clientWidth*x/100; },
-    'vh': function (x) { return document.body.clientHeight*x/100; },
-    'vmax': function (x) { return Math.max(document.body.clientWidth, document.body.clientHeight)*x/100; },
-    'vmin': function (x) { return Math.min(document.body.clientWidth, document.body.clientHeight)*x/100; }
+    "vw": function (x) { return document.body.clientWidth*x/100; },
+    "vh": function (x) { return document.body.clientHeight*x/100; },
+    "vmax": function (x) { return Math.max(document.body.clientWidth, document.body.clientHeight)*x/100; },
+    "vmin": function (x) { return Math.min(document.body.clientWidth, document.body.clientHeight)*x/100; }
 };
 function requestDelayedAnimationFrame(func, delay) {
     if(!window.requestAnimationFrame)
@@ -44,13 +44,13 @@ function makeBubble(ts) {
     }
 
     el.bubbledata = {
-        'birthtime': ts,
-        'lifetime': 20000,
-        'x': 100*Math.random(),
-        'y': 100*Math.random()+20,
-        'r': 30*Math.random()+20,
-        'dx': 20*Math.sqr(Math.random())-10,
-        'dy': 20*Math.sqr(Math.random())-10-30,
+        "birthtime": ts,
+        "lifetime": 20000,
+        "x": 100*Math.random(),
+        "y": 100*Math.random()+20,
+        "r": 30*Math.random()+20,
+        "dx": 20*Math.sqr(Math.random())-10,
+        "dy": 20*Math.sqr(Math.random())-10-30,
     };
     el.bubbledata.dr = Math.min(20*Math.random()-10, el.bubbledata.r);
     el.bubbledata.alpha = Math.max(0.25 - el.bubbledata.r*(el.bubbledata.r-el.bubbledata.dr)/10000, 0.05);

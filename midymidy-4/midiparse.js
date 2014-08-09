@@ -6,14 +6,14 @@
 (function () {
 window.loadMidi = function (url, onload, onerror) {
     var xhr = new XMLHttpRequest();
-    xhr.open('GET', url, true);
-    xhr.responseType = 'arraybuffer';
+    xhr.open("GET", url, true);
+    xhr.responseType = "arraybuffer";
     xhr.addEventListener("load", function () {
         if(xhr.status != 200 && xhr.status != 206) {
             console.error(xhr);
             reportError("HTTP Error: "+xhr.status+" "+xhr.statusText);
             if(onerror)
-                onerror({'xhr': xhr});
+                onerror({"xhr": xhr});
             return;
         }
         initMidiParse();
@@ -27,9 +27,9 @@ function initMidiParse() {
     midiData.timeslice = new Array();
     midiData.slicelen = 5;
     midiData.pending = {
-        'setNote': function (channel, note, data) { this[(channel<<8) | note] = data; },
-        'getNote': function (channel, note) { return this[(channel<<8) | note]; },
-        'delNote': function (channel, note) { return delete this[(channel<<8) | note]; }
+        "setNote": function (channel, note, data) { this[(channel<<8) | note] = data; },
+        "getNote": function (channel, note) { return this[(channel<<8) | note]; },
+        "delNote": function (channel, note) { return delete this[(channel<<8) | note]; }
     };
     midiData.maxtime = 0;
 }
@@ -137,11 +137,11 @@ function noteon(time, channel, note, vel) {
     if(vel == 0)
         return;
     midiData.pending.setNote(channel, note, {
-        'start':   time,
-        'channel': channel,
-        'note':    note,
-        'vel':     vel,
-        'flag':    0
+        "start":   time,
+        "channel": channel,
+        "note":    note,
+        "vel":     vel,
+        "flag":    0
     });
     midiData.maxtime = Math.max(midiData.maxtime, time);
 }

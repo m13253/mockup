@@ -23,7 +23,7 @@ function updateVisual() {
     context.textAlign = "center";
     context.textBaseline = "bottom";
     context.fillStyle = "black";
-    context.fillText('↓↓↓ Gaussian blur effect starts from here ↓↓↓', canvas.width/2, (stage.offsetTop+stage.clientHeight)*canvas.dataScaleFactor);
+    context.fillText("↓↓↓ Gaussian blur effect starts from here ↓↓↓", canvas.width/2, (stage.offsetTop+stage.clientHeight)*canvas.dataScaleFactor);
 }
 function drawKbgrid(canvas, context, stage) {
     if(canvas.width < 480)
