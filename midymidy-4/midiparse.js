@@ -5,21 +5,25 @@
 */
 (function () {
 window.loadMidi = function (url, onload, onerror) {
-    var xhr = new XMLHttpRequest();
-    xhr.open("GET", url, true);
-    xhr.responseType = "arraybuffer";
-    xhr.addEventListener("load", function () {
-        if(xhr.status != 200 && xhr.status != 206) {
-            console.error(xhr);
-            reportError("HTTP Error: "+xhr.status+" "+xhr.statusText);
-            if(onerror)
-                onerror({"xhr": xhr});
-            return;
-        }
-        initMidiParse();
-        parseMidiBuffer(new Uint8Array(xhr.response), 0, onload, onerror);
-    });
-    xhr.send();
+    if(onerror)
+        onerror = function (err) { console.error(err); };
+    var xhr;
+    try {
+        xhr = new XMLHttpRequest();
+        xhr.open("GET", url, true);
+        xhr.responseType = "arraybuffer";
+        xhr.addEventListener("load", function () {
+            if(xhr.status != 200 && xhr.status != 206) {
+                onerror({"err": "HTTP Error: "+xhr.status+" "+xhr.statusText, "xhr": xhr});
+                return;
+            }
+            initMidiParse();
+            parseMidiBuffer(new Uint8Array(xhr.response), 0, onload, onerror);
+        });
+        xhr.send();
+    } catch(e) {
+        onerror({"err": e, "xhr": xhr});
+    }
 }
 var midiData;
 function initMidiParse() {
@@ -34,7 +38,12 @@ function initMidiParse() {
     midiData.maxtime = 0;
 }
 function parseMidiBuffer(buf, offset, onload, onerror) {
-    offset = parseMidiBufferCycle(buf, offset);
+    try {
+        offset = parseMidiBufferCycle(buf, offset);
+    } catch(e) {
+        onerror({"err": e, "midiData": midiData});
+        return;
+    }
     if(offset < buf.length)
         setTimeout(function () { parseMidiBuffer(buf, offset, onload, onerror) }, 1);
     else if(onload)
@@ -42,11 +51,11 @@ function parseMidiBuffer(buf, offset, onload, onerror) {
 }
 function parseMidiBufferCycle(buf, offset) {
     if(!(offset >= 0))
-        reportError("Assertion Error: offset >= 0");
+        throw "Assertion Error: offset >= 0";
     if(midiData.mthd === undefined) {
         offset = scanUntil(buf, [0x4d, 0x54, 0x68, 0x64], offset);
         if(offset == -1) {
-            reportError("Parse Error: Invalid MIDI file.");
+            throw "Parse Error: Invalid MIDI file.";
             return;
         }
         midiData.mthd = {};
@@ -211,8 +220,5 @@ function scanBigint(buffer, offset) {
             return [res, offset];
     }
     return [undefined, offset];
-}
-function reportError(e) {
-    throw e;
 }
 }());
