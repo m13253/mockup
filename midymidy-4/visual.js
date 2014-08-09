@@ -5,14 +5,14 @@
 */
 (function () {
 var channel_color = [
-    "rgba(255,  51,  51, 0.8)", "rgba(102, 102, 255, 0.8)",
-    "rgba(255, 255,  51, 0.8)", "rgba(102, 255,  51, 0.8)",
-    "rgba(255, 102, 153, 0.8)", "rgba(102,   0, 102, 0.8)",
-    "rgba(  0, 204, 255, 0.8)", "rgba(153,  51,  51, 0.8)",
-    "rgba( 51,  51,   0, 0.8)", "rgba(  0,   0,   0, 0.8)",
-    "rgba(204,  51,   0, 0.8)", "rgba(  0,  51, 102, 0.8)",
-    "rgba(255,  51, 204, 0.8)", "rgba(153, 153, 102, 0.8)",
-    "rgba(153,   0,   0, 0.8)", "rgba(  0,  51,   0, 0.8)"
+    "rgba(255,  51,  51, 0.8)", "rgba(255, 255,  51, 0.8)",
+    "rgba(102, 255,  51, 0.8)", "rgba(255, 102, 153, 0.8)",
+    "rgba(102,   0, 102, 0.8)", "rgba(  0, 204, 255, 0.8)",
+    "rgba(153,  51,  51, 0.8)", "rgba( 51,  51,   0, 0.8)",
+    "rgba(  0,   0,   0, 0.8)", "rgba(204,  51,   0, 0.8)",
+    "rgba(  0,  51, 102, 0.8)", "rgba(255,  51, 204, 0.8)",
+    "rgba(153, 153, 102, 0.8)", "rgba(153,   0,   0, 0.8)",
+    "rgba(  0,  51,   0, 0.8)", "rgba(102, 102, 255, 0.8)"
 ];
 var channel_order = [15, 14, 13, 12, 11, 10, 8, 7, 6, 5, 4, 3, 2, 1, 0, 9];
 var flowSpeed = 64;
@@ -36,8 +36,7 @@ window.pauseVisual = function () {
 var midiData;
 window.startVisual = function (url) {
     document.getElementById("progressline").style.width = undefined;
-    document.getElementById("progressline").style.backgroundColor = undefined;
-    document.getElementById("progressline").style.boxShadow = undefined;
+    document.getElementById("progressline").style.backgroundImage = undefined;
     document.getElementById("progresserror").style.visibility = undefined;
     submitMidiData();
     loadMidi(url,
@@ -47,8 +46,7 @@ window.startVisual = function (url) {
         },
         function () { /* onerror */
             document.getElementById("progressline").style.width = "100%";
-            document.getElementById("progressline").style.backgroundColor = "darkred";
-            document.getElementById("progressline").style.boxShadow = "0rem 0rem 0.125rem 0rem darkred";
+            document.getElementById("progressline").style.backgroundImage = "linear-gradient(to bottom, rgba(139, 0, 0, 0) 0%, #8b0000 50%, rgba(139, 0, 0, 0) 100%)";
             document.getElementById("progresserror").style.visibility = "visible";
         },
         function (e) { /* onprogress */
