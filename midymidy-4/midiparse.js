@@ -1,24 +1,26 @@
 /*!
-  @file bubbles.js
+  @file midiparse.js
   @author StarBrilliant <m13253@hotmail.com>
   @license Commercial
 */
 (function () {
-window.loadMidi = function (url, onload, onerror) {
-    if(onerror)
+window.loadMidi = function (url, onload, onerror, onprogress, onxhrready) {
+    if(!onerror)
         onerror = function (err) { console.error(err); };
     var xhr;
     try {
         xhr = new XMLHttpRequest();
         xhr.open("GET", url, true);
         xhr.responseType = "arraybuffer";
+        if(onxhrready)
+            onxhrready(xhr);
         xhr.addEventListener("load", function () {
             if(xhr.status != 200 && xhr.status != 206) {
                 onerror({"err": "HTTP Error: "+xhr.status+" "+xhr.statusText, "xhr": xhr});
                 return;
             }
             initMidiParse();
-            parseMidiBuffer(new Uint8Array(xhr.response), 0, onload, onerror);
+            parseMidiBuffer(new Uint8Array(xhr.response), 0, onload, onerror, onprogress);
         });
         xhr.send();
     } catch(e) {
@@ -37,17 +39,25 @@ function initMidiParse() {
     };
     midiData.maxtime = 0;
 }
-function parseMidiBuffer(buf, offset, onload, onerror) {
-    try {
-        offset = parseMidiBufferCycle(buf, offset);
-    } catch(e) {
-        onerror({"err": e, "midiData": midiData});
-        return;
-    }
+function parseMidiBuffer(buf, offset, onload, onerror, onprogress) {
     if(offset < buf.length)
-        setTimeout(function () { parseMidiBuffer(buf, offset, onload, onerror) }, 1);
-    else if(onload)
-        onload(midiData);
+        setTimeout(function () {
+            if(onprogress)
+                onprogress({"lengthComputable": true, "loaded": offset, "total": buf.length});
+            try {
+                offset = parseMidiBufferCycle(buf, offset);
+            } catch(e) {
+                onerror({"err": e, "midiData": midiData});
+                return;
+            }
+            parseMidiBuffer(buf, offset, onload, onerror, onprogress);
+        }, 1);
+    else {
+        if(onprogress)
+            onprogress({"lengthComputable": true, "loaded": buf.length, "total": buf.length});
+        if(onload)
+            onload(midiData);
+    }
 }
 function parseMidiBufferCycle(buf, offset) {
     if(!(offset >= 0))

@@ -71,6 +71,17 @@ p {
     height: calc(100% - 11rem);
     min-height: 67%;
 }
+#progressline {
+    position: relative;
+    top: 33%;
+    width: 0%;
+    height: 0.065rem;
+    margin-left: auto;
+    margin-right: auto;
+    background-color: #6495ed;
+    box-shadow: 0rem 0rem 0.125rem 0rem #6495ed;
+    transition: width 0.2s linear;
+}
 .afterstage {
     width: 100%;
     padding-bottom: 2rem;
@@ -166,11 +177,14 @@ h2 {
 </head>
 <body>
   <div class="banner"><span class="logo">MidyMidy</span></div>
-  <div id="stage"></div>
+  <div id="stage"><div id="progressline"></div></div>
   <div class="afterstage">
     <div class="playcontrol">
       <h1>Jesu, Joy of Man's Desiring (播放组件还没有做好呢 :-)</h1>
-      <div><audio controls="controls"></audio></div>
+      <div><audio id="player" controls="controls">
+        <source src="media.m4a" type="audio/mp4; codec=aac" />
+        <source src="media.opus" type="audio/ogg; codec=opus" />
+      </audio></div>
     </div>
     <div class="metadata">
       <h2>信息</h2>
@@ -190,6 +204,11 @@ h2 {
   <div id="bubbles"><script src="bubbles.js" language="javascript" async></script></div>
   <div><canvas id="visual" /></canvas><script src="midiparse.js" language="javascript" async="async"></script><script src="visual.js" language="javascript" async="async"></script></div>
   <div id="pagefoot"><!-- Helps set canvas height --></div>
-  <script src="stats.min.js" language="javascript" type="text/javascript" async></script>
+  <script src="stats.min.js" language="javascript" async></script>
+  <script language="javascript">
+      window.addEventListener("load", function () {
+          startVisual("media.mid");
+      });
+  </script>
 </body>
 </html>

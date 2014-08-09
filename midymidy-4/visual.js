@@ -1,10 +1,41 @@
 /*!
-  @file bubbles.js
+  @file visual.js
   @author StarBrilliant <m13253@hotmail.com>
   @license Commercial
 */
 (function () {
-var visualRequestAnimationFrame = window.requestAnimationFrame || window.webkitRequestAnimationFrame || function (func) { return setTimeout(func, 16); };
+var channel_color = [
+    "rgba(255,  51,  51, 0.8)", "rgba(102, 102, 255, 0.8)",
+    "rgba(255, 255,  51, 0.8)", "rgba(102, 255,  51, 0.8)",
+    "rgba(255, 102, 153, 0.8)", "rgba(102,   0, 102, 0.8)",
+    "rgba(  0, 204, 255, 0.8)", "rgba(153,  51,  51, 0.8)",
+    "rgba( 51,  51,   0, 0.8)", "rgba(  0,   0,   0, 0.8)",
+    "rgba(204,  51,   0, 0.8)", "rgba(  0,  51, 102, 0.8)",
+    "rgba(255,  51, 204, 0.8)", "rgba(153, 153, 102, 0.8)",
+    "rgba(153,   0,   0, 0.8)", "rgba(  0,  51,   0, 0.8)"
+];
+window.startVisual = function (url) {
+    loadMidi(url,
+    function () { /* onload */
+    },
+    function () { /* onerror */
+        document.getElementById("progressline").style.width = "100%";
+        document.getElementById("progressline").style.backgroundColor = "darkred";
+        document.getElementById("progressline").style.boxShadow = "0rem 0rem 0.125rem 0rem darkred";
+    },
+    function (e) { /* onprogress */
+        document.getElementById("progressline").style.width = 50+50*e.loaded/e.total+"%";
+    },
+    function (xhr) { /* onxhrready */
+        xhr.addEventListener("progress", function (e) {
+            if(e.lengthComputable)
+                document.getElementById("progressline").style.width = 50*e.loaded/e.total+"%";
+        });
+        xhr.addEventListener("load", function (e) {
+            document.getElementById("progressline").style.width = "50%";
+        });
+    });
+}
 function updateVisual() {
     var canvas = document.getElementById("visual");
     var context = canvas.getContext("2d");
@@ -43,12 +74,17 @@ function drawKbgrid(canvas, context, stage) {
         }
     context.stroke();
 }
+lastNonce = 0;
+function getNonce() {
+    return ++lastNonce;
+}
 function getCanvasPixelRatio(el) {
     var context = el.getContext("2d");
     var devicePixelRatio = window.devicePixelRatio || 1;
     var backingStorePixelRatio = context.backingStorePixelRatio || context.webkitBackingStorePixelRatio || 1;
     return devicePixelRatio/backingStorePixelRatio;
 }
+var visualRequestAnimationFrame = window.requestAnimationFrame || window.webkitRequestAnimationFrame || function (func) { return setTimeout(func, 16); };
 window.addEventListener("load", function () {
     var visual = document.getElementById("visual");
     var pagefoot = document.getElementById("pagefoot");
