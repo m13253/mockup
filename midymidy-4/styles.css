@@ -85,8 +85,8 @@ p {
 .afterstage {
     width: 100%;
     padding-bottom: 2rem;
-    background-image: -webkit-radial-gradient(top, circle closest-corner, rgba(200, 220, 240, 0.7) 0%, rgba(162, 200, 220, 0.8) 100%);
-    background-image: radial-gradient(circle closest-corner at top, rgba(200, 220, 240, 0.7) 0%, rgba(162, 200, 220, 0.8) 100%);
+    background-image: -webkit-radial-gradient(top, circle closest-corner, rgba(255, 255, 255, 0.6) 0%, rgba(162, 200, 220, 0.8) 100%);
+    background-image: radial-gradient(circle closest-corner at top, rgba(255, 255, 255, 0.6) 0%, rgba(162, 200, 220, 0.8) 100%);
     box-shadow: 0rem -1rem 2rem -1rem rgba(0, 0, 0, 0.25);
 }
 .playcontrol {
