@@ -53,7 +53,7 @@ function makeBubble(ts) {
         "alpha": undefined
     };
     el.bubbledata.dr = Math.min(20*Math.random()-10, el.bubbledata.r);
-    el.bubbledata.alpha = Math.max(0.25 - el.bubbledata.r*(el.bubbledata.r-el.bubbledata.dr)/10000, 0.05);
+    el.bubbledata.alpha = Math.max(0.2 - el.bubbledata.r*(el.bubbledata.r-el.bubbledata.dr)/10000, 0.05);
 
     animateBubble(bubble_item.push(el)-1, ts);
     requestDelayedAnimationFrame(makeBubble, 2000);
