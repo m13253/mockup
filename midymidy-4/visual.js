@@ -181,9 +181,9 @@ function drawNoteSide(canvas, context, timestamp, progresspos, stagestart, stage
                         note.flag = nonce;
                         if((note.end > starttime || note.start < endtime) && (note.end-note.start >= 4/flowSpeed)) {
                             var x  = Math.round(canvas.width*(note.note+0.5)/128);
-                            var x1 = Math.floor(canvas.width*(note.note-3)/128);
-                            var x2 = Math.ceil(canvas.width*(note.note+4)/128);
-                            var r  = Math.ceil(canvas.width*7/256);
+                            var r  = Math.ceil(Math.max(canvas.width*7/256, 32*canvas.dataScaleFactor));
+                            var x1 = x-r;
+                            var x2 = x+r;
                             var y1 = Math.floor(progresspos+(note.start-timestamp)*flowSpeed);
                             var y2 = Math.ceil(progresspos+(note.end-timestamp)*flowSpeed);
                             if(y1 > stagestart) {

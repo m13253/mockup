@@ -48,7 +48,7 @@ p {
 .banner {
     width: 100%;
     height: 3rem;
-    background-image: -webkit-linear-gradient(top, rgba(240, 255, 240, 0.75) 0%, rgba(255, 255, 255, 0.85) 100%);
+    background-image: -webkit-linear-gradient(top, rgba(240, 255, 240, 0.7) 0%, rgba(255, 255, 255, 0.8) 100%);
     background-image: linear-gradient(to bottom, rgba(240, 255, 240, 0.7) 0%, rgba(255, 255, 255, 0.8) 100%);
     box-shadow: 0rem 1rem 2rem -1rem rgba(0, 0, 0, 0.25);
 }
@@ -84,8 +84,8 @@ p {
 .afterstage {
     width: 100%;
     padding-bottom: 2rem;
-    background-image: -webkit-radial-gradient(top, circle closest-corner, rgba(255, 255, 255, 0.6) 0%, rgba(240, 255, 240, 0.4) 100%);
-    background-image: radial-gradient(circle closest-corner at top, rgba(255, 255, 255, 0.6) 0%, rgba(240, 255, 240, 0.4) 100%);
+    background-image: -webkit-radial-gradient(top, circle closest-corner, rgba(220, 240, 230, 0.7) 0%, rgba(164, 190, 192, 0.8) 100%);
+    background-image: radial-gradient(circle closest-corner at top, rgba(220, 240, 230, 0.7) 0%, rgba(164, 190, 192, 0.8) 100%);
     box-shadow: 0rem -1rem 2rem -1rem rgba(0, 0, 0, 0.25);
 }
 .playcontrol {
