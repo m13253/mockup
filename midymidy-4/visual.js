@@ -168,16 +168,20 @@ function drawNoteRect(canvas, context, timestamp, progresspos, stagestart, stage
                                 var x2 = canvas.width*(note.note+3)/128;
                                 var y1 = progresspos+(note.start-timestamp)*flowSpeed;
                                 var y2 = progresspos+(note.end-timestamp)*flowSpeed;
-                                var gradient = context.createRadialGradient(x, y1, 0, x, y1, canvas.width*5/256);
-                                gradient.addColorStop(0, "rgba("+channel_color[channel]+", 0.5)");
-                                gradient.addColorStop(1, "rgba("+channel_color[channel]+", 0)");
-                                context.fillStyle = gradient;
-                                context.fillRect(x1, y1-canvas.width/64, x2-x1, canvas.width/64);
-                                var gradient = context.createRadialGradient(x, y2, 0, x, y2, canvas.width*5/256);
-                                gradient.addColorStop(0, "rgba("+channel_color[channel]+", 0.5)");
-                                gradient.addColorStop(1, "rgba("+channel_color[channel]+", 0)");
-                                context.fillStyle = gradient;
-                                context.fillRect(x1, y2, x2-x1, canvas.width/64);
+                                if(y1 > stagestart) {
+                                    var gradient = context.createRadialGradient(x, y1, 0, x, y1, canvas.width*5/256);
+                                    gradient.addColorStop(0, "rgba("+channel_color[channel]+", 0.5)");
+                                    gradient.addColorStop(1, "rgba("+channel_color[channel]+", 0)");
+                                    context.fillStyle = gradient;
+                                    context.fillRect(x1, y1-canvas.width*5/256, x2-x1, canvas.width*5/256);
+                                }
+                                if(y2 < stageend) {
+                                    var gradient = context.createRadialGradient(x, y2, 0, x, y2, canvas.width*5/256);
+                                    gradient.addColorStop(0, "rgba("+channel_color[channel]+", 0.5)");
+                                    gradient.addColorStop(1, "rgba("+channel_color[channel]+", 0)");
+                                    context.fillStyle = gradient;
+                                    context.fillRect(x1, y2, x2-x1, canvas.width*5/256);
+                                }
                                 var gradient = context.createLinearGradient(x1, 0, x2, 0);
                                 gradient.addColorStop(0, "rgba("+channel_color[channel]+", 0)");
                                 gradient.addColorStop(0.5, "rgba("+channel_color[channel]+", 0.5)");
