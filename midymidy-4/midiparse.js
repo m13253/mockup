@@ -43,7 +43,7 @@ function parseMidiBuffer(buf, offset, onload, onerror, onprogress) {
     if(offset < buf.length)
         setTimeout(function () {
             if(onprogress)
-                onprogress({"lengthComputable": true, "loaded": offset, "total": buf.length});
+                onprogress({"lengthComputable": true, "loaded": offset, "total": buf.length, "midiData": midiData});
             try {
                 offset = parseMidiBufferCycle(buf, offset);
             } catch(e) {
@@ -54,7 +54,7 @@ function parseMidiBuffer(buf, offset, onload, onerror, onprogress) {
         }, 1);
     else {
         if(onprogress)
-            onprogress({"lengthComputable": true, "loaded": buf.length, "total": buf.length});
+            onprogress({"lengthComputable": true, "loaded": buf.length, "total": buf.length, "midiData": midiData});
         if(onload)
             onload(midiData);
     }
