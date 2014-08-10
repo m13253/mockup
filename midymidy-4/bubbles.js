@@ -81,10 +81,11 @@ function animateBubbles(ts) {
         ;
     requestDelayedAnimationFrame(animateBubbles, 100); /* Firefox can not even run at 25fps!!! */
 }
-window.addEventListener("load", function () {
+function initBubbles() {
     requestDelayedAnimationFrame(function (ts) {
         makeBubble(ts);
         animateBubbles(ts);
     }, 100);
-});
+}
+initBubbles();
 }());

@@ -26,7 +26,7 @@ window.loadMidi = function (url, onload, onerror, onprogress, onxhrready) {
     } catch(e) {
         onerror({"err": e, "xhr": xhr});
     }
-}
+};
 var midiData;
 function initMidiParse() {
     midiData = {};

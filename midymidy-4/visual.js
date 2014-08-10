@@ -35,7 +35,7 @@ window.pauseVisual = function () {
 window.refreshVisual = function () {
     if(visualPaused)
         visualRequestAnimationFrame(paintVisual);
-}
+};
 var midiData;
 window.startVisual = function (url) {
     document.getElementById("progressline").style.width = undefined;
@@ -66,7 +66,7 @@ window.startVisual = function (url) {
             });
         }
     );
-}
+};
 function paintVisual() {
     var canvas = document.getElementById("visual");
     var context = canvas.getContext("2d");
@@ -215,7 +215,7 @@ function drawNoteSide(canvas, context, timestamp, progresspos, stagestart, stage
 }
 window.submitMidiData = function (midiData_) {
     midiData = midiData_;
-}
+};
 lastNonce = 0;
 function getNonce() {
     return ++lastNonce;
@@ -226,7 +226,11 @@ function getCanvasPixelRatio(el) {
     var backingStorePixelRatio = context.backingStorePixelRatio || context.webkitBackingStorePixelRatio || 1;
     return devicePixelRatio/backingStorePixelRatio;
 }
-window.addEventListener("load", function () {
+function initVisual() {
+    var player = document.getElementById("player");
+    player.addEventListener("play", resumeVisual);
+    player.addEventListener("pause", pauseVisual);
+    player.addEventListener("timeupdate", refreshVisual);
     var visual = document.getElementById("visual");
     var pagefoot = document.getElementById("pagefoot");
     var resizefunc = function () {
@@ -239,9 +243,6 @@ window.addEventListener("load", function () {
     window.addEventListener("resize", resizefunc);
     window.addEventListener("scroll", refreshVisual);
     resizefunc();
-    var player = document.getElementById("player");
-    player.addEventListener("play", resumeVisual);
-    player.addEventListener("pause", pauseVisual);
-    player.addEventListener("timeupdate", refreshVisual);
-});
+}
+initVisual();
 }());
