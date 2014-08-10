@@ -89,7 +89,6 @@ function parseMidiBufferCycle(buf, offset) {
         }
         var notesCount = 0;
         while(offset != -1 && offset < midiData.trackEnd) {
-            var tmpoffset = offset;
             var delta = scanBigint(buf, offset);
             if(delta[0] === undefined)
                 break;
@@ -105,16 +104,16 @@ function parseMidiBufferCycle(buf, offset) {
                 meta = midiData.meta;
             if(meta == 0xff) {
                 var cmd = scanInt(buf, offset, 1);
-                var metalen = scanInt(buf, offset+1, 1);
-                if(metalen === undefined)
+                var metalen = scanBigint(buf, offset+1);
+                if(metalen[0] === undefined)
                     break;
-                offset += 2;
+                offset = metalen[1];
                 switch(cmd) {
                 case 0x51:
-                    midiData.tempo[midiData.time] = midiData.mthd.division*1000000/scanInt(buf, offset, metalen);
+                    midiData.tempo[midiData.time] = midiData.mthd.division*1000000/scanInt(buf, offset, metalen[0]);
                     break;
                 }
-                offset += metalen;
+                offset += metalen[0];
             } else {
                 var channel = meta&0xf;
                 var cmd = meta>>4;
