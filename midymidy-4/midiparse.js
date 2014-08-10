@@ -227,7 +227,7 @@ function scanInt(buffer, offset, len) {
 function scanBigint(buffer, offset) {
     var res = 0;
     while(buffer[offset] !== undefined) {
-        res = (res<<7) | (buffer[offset]&0x7f);
+        res = (res*128) + (buffer[offset]&0x7f);
         if(!(buffer[offset++]&0x80))
             return [res, offset];
     }
