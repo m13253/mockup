@@ -36,8 +36,8 @@ function makeBubble(ts) {
         el.style.position = "fixed";
         el.style.zIndex = "-1";
         el.style.top = el.style.left = "0px";
-        el.style.height = el.style.width = "64px";
-        el.style.backgroundImage = "radial-gradient(circle at center, white 60%, rgba(255, 255, 255, 0) 70%)";
+        el.style.height = el.style.width = "16px";
+        el.style.backgroundImage = "radial-gradient(circle closest-side at center, white 80%, rgba(255, 255, 255, 0) 100%)";
         elBubbles.appendChild(el);
     }
 
@@ -46,14 +46,13 @@ function makeBubble(ts) {
         "lifetime": 20000,
         "x": 100*Math.random(),
         "y": 100*Math.random()+20,
-        "r": 30*Math.random()+20,
+        "r": 50*Math.random()+20,
         "dr": undefined,
         "dx": 20*Math.sqr(Math.random())-10,
         "dy": 20*Math.sqr(Math.random())-10-30,
-        "alpha": undefined
+        "alpha": 0.1*Math.random()+0.05
     };
     el.bubbledata.dr = Math.min(20*Math.random()-10, el.bubbledata.r);
-    el.bubbledata.alpha = Math.max(0.2 - el.bubbledata.r*(el.bubbledata.r-el.bubbledata.dr)/10000, 0.05);
 
     animateBubble(bubble_item.push(el)-1, ts);
     requestDelayedAnimationFrame(makeBubble, 2000);
@@ -73,7 +72,7 @@ function animateBubble(idx, ts) {
     var r = calcViewportMetrics.vmin(el.bubbledata.r+el.bubbledata.dr*progress);
     var alpha = el.bubbledata.alpha*progress*(1-progress)*4;
     el.style.opacity = alpha;
-    el.style.transform = el.style.webkitTransform = "translate("+(x-r/2)+"px, "+(y-r/2)+"px) scale("+r/64+") translateZ(0px)";
+    el.style.transform = el.style.webkitTransform = "translate("+(x-r/2)+"px, "+(y-r/2)+"px) scale("+r/16+") translateZ(0px)";
     return true;
 }
 function animateBubbles(ts) {
