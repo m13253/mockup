@@ -181,9 +181,9 @@ function drawNoteSide(canvas, context, timestamp, progresspos, stagestart, stage
                         note.flag = nonce;
                         if((note.end > starttime || note.start < endtime) && (note.end-note.start >= 4/flowSpeed)) {
                             var x  = Math.round(canvas.width*(note.note+0.5)/128);
-                            var x1 = Math.floor(canvas.width*(note.note-2)/128);
-                            var x2 = Math.ceil(canvas.width*(note.note+3)/128);
-                            var r  = Math.ceil(canvas.width*5/256);
+                            var x1 = Math.floor(canvas.width*(note.note-3)/128);
+                            var x2 = Math.ceil(canvas.width*(note.note+4)/128);
+                            var r  = Math.ceil(canvas.width*7/256);
                             var y1 = Math.floor(progresspos+(note.start-timestamp)*flowSpeed);
                             var y2 = Math.ceil(progresspos+(note.end-timestamp)*flowSpeed);
                             if(y1 > stagestart) {
@@ -233,16 +233,17 @@ function drawNoteHighlight(canvas, context, timestamp, progresspos, stagestart, 
                 var note = midiData.timeslice[channel][slice][idx];
                 if(note.flag != nonce) {
                     note.flag = nonce;
-                    if(note.start < timestamp && note.end > timestamp && (note.end-note.start)*flowSpeed >= 4) {
+                    if(note.start < timestamp && note.end > timestamp && note.end-note.start >= 1/flowSpeed) {
                         var x  = Math.round(canvas.width*(note.note+0.5)/128);
+                        var r  = Math.ceil(canvas.width*5/256);
                         var x1 = Math.ceil(canvas.width*(note.note-2)/128);
                         var x2 = Math.floor(canvas.width*(note.note+3)/128);
-                        var r  = Math.ceil(canvas.width*5/256);
                         var y1 = Math.ceil(progresspos+(note.start-timestamp)*flowSpeed);
                         var y2 = Math.floor(progresspos+(note.end-timestamp)*flowSpeed);
                         if(y1 > stagestart) {
                             var gradient = context.createRadialGradient(x, y1, 0, x, y1, r);
                             gradient.addColorStop(0, "rgba("+channel_color[channel]+", 0.4)");
+                            gradient.addColorStop(0.25, "rgba("+channel_color[channel]+", 0.2)");
                             gradient.addColorStop(1, "rgba("+channel_color[channel]+", 0)");
                             context.fillStyle = gradient;
                             context.fillRect(x1, y1-r, x2-x1, r);
@@ -250,6 +251,7 @@ function drawNoteHighlight(canvas, context, timestamp, progresspos, stagestart, 
                         if(y2 < stageend) {
                             var gradient = context.createRadialGradient(x, y2, 0, x, y2, r);
                             gradient.addColorStop(0, "rgba("+channel_color[channel]+", 0.4)");
+                            gradient.addColorStop(0.25, "rgba("+channel_color[channel]+", 0.2)");
                             gradient.addColorStop(1, "rgba("+channel_color[channel]+", 0)");
                             context.fillStyle = gradient;
                             context.fillRect(x1, y2, x2-x1, r);
@@ -257,10 +259,12 @@ function drawNoteHighlight(canvas, context, timestamp, progresspos, stagestart, 
                         if(y2 > y1) {
                             var gradient = context.createLinearGradient(x1, 0, x2, 0);
                             gradient.addColorStop(0, "rgba("+channel_color[channel]+", 0)");
+                            gradient.addColorStop(0.3, "rgba("+channel_color[channel]+", 0.2)");
                             gradient.addColorStop(0.4, "rgba("+channel_color[channel]+", 0.4)");
-                            gradient.addColorStop(0.41, "rgba("+channel_color[channel]+", 0)");
-                            gradient.addColorStop(0.59, "rgba("+channel_color[channel]+", 0)");
+                            gradient.addColorStop(0.41, "rgba(255, 255, 255, 0.02)");
+                            gradient.addColorStop(0.59, "rgba(255, 255, 255, 0.02)");
                             gradient.addColorStop(0.6, "rgba("+channel_color[channel]+", 0.4)");
+                            gradient.addColorStop(0.7, "rgba("+channel_color[channel]+", 0.2)");
                             gradient.addColorStop(1, "rgba("+channel_color[channel]+", 0)");
                             context.fillStyle = gradient;
                             context.fillRect(x1, y1, x2-x1, y2-y1);
