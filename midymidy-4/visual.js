@@ -5,14 +5,14 @@
 */
 (function () {
 var channel_color = [
-    "rgb(255,  51,  51)", "rgb(255, 255,  51)",
-    "rgb(102, 255,  51)", "rgb(255, 102, 153)",
-    "rgb(102,   0, 102)", "rgb(  0, 204, 255)",
-    "rgb(153,  51,  51)", "rgb( 51,  51,   0)",
-    "rgb(204,  51,   0)", "rgb(  0,   0,   0)", 
-    "rgb(  0,  51, 102)", "rgb(255,  51, 204)",
-    "rgb(153, 153, 102)", "rgb(153,   0,   0)",
-    "rgb(  0,  51,   0)", "rgb(102, 102, 255)"
+    "255,  51,  51", "255, 255,  51",
+    "102, 255,  51", "255, 102, 153",
+    "102,   0, 102", "  0, 204, 255",
+    "153,  51,  51", " 51,  51,   0",
+    "204,  51,   0", "  0,   0,   0", 
+    "  0,  51, 102", "255,  51, 204",
+    "153, 153, 102", "153,   0,   0",
+    "  0,  51,   0", "102, 102, 255"
 ];
 var channel_order = [15, 14, 13, 12, 11, 10, 8, 7, 6, 5, 4, 3, 2, 1, 0, 9];
 var flowSpeed = 64;
@@ -116,12 +116,9 @@ function drawNote(canvas, context, stage) {
     var progresspos = (progressline.offsetTop+progressline.clientHeight/2)*canvas.dataScaleFactor;
     var stagestart = stage.offsetTop*canvas.dataScaleFactor;
     var stageend = (stage.offsetTop+stage.clientHeight)*canvas.dataScaleFactor;
-    context.save();
-    context.beginPath();
-    context.rect(0, stagestart, canvas.width, stageend-stagestart);
-    context.clip();
+    drawNoteRect(canvas, context, timestamp, progresspos, 0, stagestart, false);
     drawNoteRect(canvas, context, timestamp, progresspos, stagestart, stageend, true);
-    context.restore();
+    drawNoteRect(canvas, context, timestamp, progresspos, stageend, canvas.height, false);
 }
 function drawNoteRect(canvas, context, timestamp, progresspos, stagestart, stageend, mainarea) {
     var starttime  = timestamp+(stagestart-progresspos)/flowSpeed;
@@ -129,25 +126,56 @@ function drawNoteRect(canvas, context, timestamp, progresspos, stagestart, stage
     var startslice = Math.max(Math.floor(starttime/midiData.slicelen), 0);
     var endslice   = Math.ceil(endtime/midiData.slicelen);
     var nonce = getNonce();
-    context.globalAlpha = 0.75;
-    for(var channel_index = 0; channel_index < 16; channel_index++) {
-        var channel = channel_order[channel_index];
-        if(!midiData.timeslice[channel])
-            continue;
-        context.beginPath();
-        context.fillStyle = channel_color[channel];
-        for(slice = startslice; slice <= endslice; slice++)
-            if(midiData.timeslice[channel][slice])
-                for(var idx = 0; idx < midiData.timeslice[channel][slice].length; idx++) {
-                    var note = midiData.timeslice[channel][slice][idx];
-                    if(note.flag != nonce) {
-                        note.flag = nonce;
-                        if((note.end > starttime || note.start < endtime) && (note.end-note.start >= 1/flowSpeed))
-                            context.rect(canvas.width*note.note/128, progresspos+(note.start-timestamp)*flowSpeed, canvas.width/128, (note.end-note.start)*flowSpeed);
+    context.save();
+    context.beginPath();
+    context.rect(0, stagestart, canvas.width, stageend-stagestart);
+    context.clip();
+    if(mainarea) {
+        context.globalAlpha = 0.75;
+        for(var channel_index = 0; channel_index < 16; channel_index++) {
+            var channel = channel_order[channel_index];
+            if(!midiData.timeslice[channel])
+                continue;
+            context.beginPath();
+            context.fillStyle = "rgb("+channel_color[channel]+")";
+            for(slice = startslice; slice <= endslice; slice++)
+                if(midiData.timeslice[channel][slice])
+                    for(var idx = 0; idx < midiData.timeslice[channel][slice].length; idx++) {
+                        var note = midiData.timeslice[channel][slice][idx];
+                        if(note.flag != nonce) {
+                            note.flag = nonce;
+                            if((note.end > starttime || note.start < endtime) && (note.end-note.start >= 1/flowSpeed))
+                                context.rect(canvas.width*note.note/128, progresspos+(note.start-timestamp)*flowSpeed, canvas.width/128, (note.end-note.start)*flowSpeed);
+                        }
                     }
-                }
-        context.fill();
+            context.fill();
+        }
+    } else {
+        context.globalAlpha = 1;
+        for(var channel_index = 0; channel_index < 16; channel_index++) {
+            var channel = channel_order[channel_index];
+            if(!midiData.timeslice[channel])
+                continue;
+            for(slice = startslice; slice <= endslice; slice++)
+                if(midiData.timeslice[channel][slice])
+                    for(var idx = 0; idx < midiData.timeslice[channel][slice].length; idx++) {
+                        var note = midiData.timeslice[channel][slice][idx];
+                        if(note.flag != nonce) {
+                            note.flag = nonce;
+                            if((note.end > starttime || note.start < endtime) && (note.end-note.start >= 1/flowSpeed)) {
+                                var x = canvas.width*(note.note-1)/128;
+                                var gradient = context.createLinearGradient(x, 0, x+canvas.width*3/128, 0);
+                                gradient.addColorStop(0, "rgba("+channel_color[channel]+", 0)");
+                                gradient.addColorStop(0.5, "rgba("+channel_color[channel]+", 0.5)");
+                                gradient.addColorStop(1, "rgba("+channel_color[channel]+", 0)");
+                                context.fillStyle = gradient;
+                                context.fillRect(x, progresspos+(note.start-timestamp)*flowSpeed, canvas.width*3/128, (note.end-note.start)*flowSpeed);
+                            }
+                        }
+                    }
+        }
     }
+    context.restore();
 }
 window.submitMidiData = function (midiData_) {
     midiData = midiData_;
