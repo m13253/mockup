@@ -116,11 +116,15 @@ function drawNote(canvas, context, stage) {
     var progresspos = (progressline.offsetTop+progressline.clientHeight/2)*canvas.dataScaleFactor;
     var stagestart = stage.offsetTop*canvas.dataScaleFactor;
     var stageend = (stage.offsetTop+stage.clientHeight)*canvas.dataScaleFactor;
-    drawNoteRect(canvas, context, timestamp, progresspos, 0, stagestart, false);
-    drawNoteRect(canvas, context, timestamp, progresspos, stagestart, stageend, true);
-    drawNoteRect(canvas, context, timestamp, progresspos, stageend, canvas.height, false);
+    var pagestart = document.body.scrollTop*canvas.dataScaleFactor;
+    var pageend = (document.body.scrollTop+document.body.clientHeight)*canvas.dataScaleFactor;
+    drawNoteRect(canvas, context, timestamp, progresspos, Math.max(0, pagestart), stagestart, false);
+    drawNoteRect(canvas, context, timestamp, progresspos, Math.max(stagestart, pagestart), Math.min(stageend, pageend), true);
+    drawNoteRect(canvas, context, timestamp, progresspos, Math.max(stageend, pagestart), Math.min(canvas.height, pageend), false);
 }
 function drawNoteRect(canvas, context, timestamp, progresspos, stagestart, stageend, mainarea) {
+    if(stagestart >= stageend)
+        return;
     var starttime  = timestamp+(stagestart-progresspos)/flowSpeed;
     var endtime    = timestamp+(stageend-progresspos)/flowSpeed;
     var startslice = Math.max(Math.floor(starttime/midiData.slicelen), 0);
@@ -224,6 +228,6 @@ window.addEventListener("load", function () {
     player.addEventListener("play", resumeVisual);
     player.addEventListener("pause", pauseVisual);
     player.addEventListener("timeupdate", refreshVisual);
-    player.addEventListener("seeking", refreshVisual);
+    window.addEventListener("scroll", refreshVisual);
 });
 }());
