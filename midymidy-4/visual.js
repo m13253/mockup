@@ -23,10 +23,9 @@ window.resumeVisual = function () {
         return;
     visualPaused = false;
     var iterfunc = function () {
-        if(visualPaused)
-            return;
         paintVisual();
-        visualRequestAnimationFrame(iterfunc);
+        if(!visualPaused)
+            visualRequestAnimationFrame(iterfunc);
     };
     visualRequestAnimationFrame(iterfunc);
 };
@@ -35,7 +34,7 @@ window.pauseVisual = function () {
 };
 window.refreshVisual = function () {
     if(visualPaused)
-        paintVisual();
+        visualRequestAnimationFrame(paintVisual);
 }
 var midiData;
 window.startVisual = function (url) {
@@ -235,14 +234,14 @@ window.addEventListener("load", function () {
         visual.width = document.body.clientWidth * visual.dataScaleFactor;
         visual.height = pagefoot.offsetTop * visual.dataScaleFactor;
         visual.style.height = pagefoot.offsetTop + "px";
-        paintVisual();
+        refreshVisual();
     };
     window.addEventListener("resize", resizefunc);
+    window.addEventListener("scroll", refreshVisual);
     resizefunc();
     var player = document.getElementById("player");
     player.addEventListener("play", resumeVisual);
     player.addEventListener("pause", pauseVisual);
     player.addEventListener("timeupdate", refreshVisual);
-    window.addEventListener("scroll", refreshVisual);
 });
 }());
