@@ -45,7 +45,7 @@ window.startVisual = function (url) {
     loadMidi(url,
         function (midiData_) { /* onload */
             submitMidiData(midiData_);
-            refresh();
+            refreshVisual();
         },
         function () { /* onerror */
             document.getElementById("progressline").style.width = "100%";
@@ -120,6 +120,7 @@ function drawNote(canvas, context, stage) {
     var pageend = (document.body.scrollTop+document.body.clientHeight)*canvas.dataScaleFactor;
     drawNoteSide(canvas, context, timestamp, progresspos, Math.max(0, pagestart), stagestart);
     drawNoteMain(canvas, context, timestamp, progresspos, Math.max(stagestart, pagestart), Math.min(stageend, pageend));
+    drawNoteHighlight(canvas, context, timestamp, progresspos, stagestart, stageend);
     drawNoteSide(canvas, context, timestamp, progresspos, Math.max(stageend, pagestart), Math.min(canvas.height, pageend));
 }
 function drawNoteMain(canvas, context, timestamp, progresspos, stagestart, stageend) {
@@ -210,6 +211,63 @@ function drawNoteSide(canvas, context, timestamp, progresspos, stagestart, stage
                         }
                     }
                 }
+    }
+    context.restore();
+}
+function drawNoteHighlight(canvas, context, timestamp, progresspos, stagestart, stageend) {
+    if(stagestart >= stageend)
+        return;
+    var slice = Math.max(Math.floor(timestamp/midiData.slicelen), 0);
+    var nonce = getNonce();
+    context.save();
+    context.beginPath();
+    context.rect(0, stagestart, canvas.width, stageend-stagestart);
+    context.clip();
+    context.globalAlpha = 1;
+    for(var channel_index = 0; channel_index < 16; channel_index++) {
+        var channel = channel_order[channel_index];
+        if(!midiData.timeslice[channel])
+            continue;
+        if(midiData.timeslice[channel][slice])
+            for(var idx = 0; idx < midiData.timeslice[channel][slice].length; idx++) {
+                var note = midiData.timeslice[channel][slice][idx];
+                if(note.flag != nonce) {
+                    note.flag = nonce;
+                    if(note.start < timestamp && note.end > timestamp && (note.end-note.start)*flowSpeed >= 4) {
+                        var x  = Math.round(canvas.width*(note.note+0.5)/128);
+                        var x1 = Math.ceil(canvas.width*(note.note-2)/128);
+                        var x2 = Math.floor(canvas.width*(note.note+3)/128);
+                        var r  = Math.ceil(canvas.width*5/256);
+                        var y1 = Math.ceil(progresspos+(note.start-timestamp)*flowSpeed);
+                        var y2 = Math.floor(progresspos+(note.end-timestamp)*flowSpeed);
+                        if(y1 > stagestart) {
+                            var gradient = context.createRadialGradient(x, y1, 0, x, y1, r);
+                            gradient.addColorStop(0, "rgba("+channel_color[channel]+", 0.4)");
+                            gradient.addColorStop(1, "rgba("+channel_color[channel]+", 0)");
+                            context.fillStyle = gradient;
+                            context.fillRect(x1, y1-r, x2-x1, r);
+                        }
+                        if(y2 < stageend) {
+                            var gradient = context.createRadialGradient(x, y2, 0, x, y2, r);
+                            gradient.addColorStop(0, "rgba("+channel_color[channel]+", 0.4)");
+                            gradient.addColorStop(1, "rgba("+channel_color[channel]+", 0)");
+                            context.fillStyle = gradient;
+                            context.fillRect(x1, y2, x2-x1, r);
+                        }
+                        if(y2 > y1) {
+                            var gradient = context.createLinearGradient(x1, 0, x2, 0);
+                            gradient.addColorStop(0, "rgba("+channel_color[channel]+", 0)");
+                            gradient.addColorStop(0.4, "rgba("+channel_color[channel]+", 0.4)");
+                            gradient.addColorStop(0.41, "rgba("+channel_color[channel]+", 0)");
+                            gradient.addColorStop(0.59, "rgba("+channel_color[channel]+", 0)");
+                            gradient.addColorStop(0.6, "rgba("+channel_color[channel]+", 0.4)");
+                            gradient.addColorStop(1, "rgba("+channel_color[channel]+", 0)");
+                            context.fillStyle = gradient;
+                            context.fillRect(x1, y1, x2-x1, y2-y1);
+                        }
+                    }
+                }
+            }
     }
     context.restore();
 }
