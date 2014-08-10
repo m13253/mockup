@@ -163,14 +163,27 @@ function drawNoteRect(canvas, context, timestamp, progresspos, stagestart, stage
                         if(note.flag != nonce) {
                             note.flag = nonce;
                             if((note.end > starttime || note.start < endtime) && (note.end-note.start >= 1/flowSpeed)) {
+                                var x  = canvas.width*(note.note+0.5)/128;
                                 var x1 = canvas.width*(note.note-2)/128;
                                 var x2 = canvas.width*(note.note+3)/128;
+                                var y1 = progresspos+(note.start-timestamp)*flowSpeed;
+                                var y2 = progresspos+(note.end-timestamp)*flowSpeed;
+                                var gradient = context.createRadialGradient(x, y1, 0, x, y1, canvas.width*5/256);
+                                gradient.addColorStop(0, "rgba("+channel_color[channel]+", 0.5)");
+                                gradient.addColorStop(1, "rgba("+channel_color[channel]+", 0)");
+                                context.fillStyle = gradient;
+                                context.fillRect(x1, y1-canvas.width/64, x2-x1, canvas.width/64);
+                                var gradient = context.createRadialGradient(x, y2, 0, x, y2, canvas.width*5/256);
+                                gradient.addColorStop(0, "rgba("+channel_color[channel]+", 0.5)");
+                                gradient.addColorStop(1, "rgba("+channel_color[channel]+", 0)");
+                                context.fillStyle = gradient;
+                                context.fillRect(x1, y2, x2-x1, canvas.width/64);
                                 var gradient = context.createLinearGradient(x1, 0, x2, 0);
                                 gradient.addColorStop(0, "rgba("+channel_color[channel]+", 0)");
                                 gradient.addColorStop(0.5, "rgba("+channel_color[channel]+", 0.5)");
                                 gradient.addColorStop(1, "rgba("+channel_color[channel]+", 0)");
                                 context.fillStyle = gradient;
-                                context.fillRect(x1, progresspos+(note.start-timestamp)*flowSpeed, x2-x1, (note.end-note.start)*flowSpeed);
+                                context.fillRect(x1, y1, x2-x1, y2-y1);
                             }
                         }
                     }
