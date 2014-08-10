@@ -163,13 +163,14 @@ function drawNoteRect(canvas, context, timestamp, progresspos, stagestart, stage
                         if(note.flag != nonce) {
                             note.flag = nonce;
                             if((note.end > starttime || note.start < endtime) && (note.end-note.start >= 1/flowSpeed)) {
-                                var x = canvas.width*(note.note-1)/128;
-                                var gradient = context.createLinearGradient(x, 0, x+canvas.width*3/128, 0);
+                                var x1 = canvas.width*(note.note-2)/128;
+                                var x2 = canvas.width*(note.note+3)/128;
+                                var gradient = context.createLinearGradient(x1, 0, x2, 0);
                                 gradient.addColorStop(0, "rgba("+channel_color[channel]+", 0)");
                                 gradient.addColorStop(0.5, "rgba("+channel_color[channel]+", 0.5)");
                                 gradient.addColorStop(1, "rgba("+channel_color[channel]+", 0)");
                                 context.fillStyle = gradient;
-                                context.fillRect(x, progresspos+(note.start-timestamp)*flowSpeed, canvas.width*3/128, (note.end-note.start)*flowSpeed);
+                                context.fillRect(x1, progresspos+(note.start-timestamp)*flowSpeed, x2-x1, (note.end-note.start)*flowSpeed);
                             }
                         }
                     }
