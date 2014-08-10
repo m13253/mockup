@@ -120,7 +120,7 @@ function drawNote(canvas, context, stage) {
     var pageend = (document.body.scrollTop+document.body.clientHeight)*canvas.dataScaleFactor;
     drawNoteSide(canvas, context, timestamp, progresspos, Math.max(0, pagestart), stagestart);
     drawNoteMain(canvas, context, timestamp, progresspos, Math.max(stagestart, pagestart), Math.min(stageend, pageend));
-    drawNoteHighlight(canvas, context, timestamp, progresspos, stagestart, stageend);
+    drawNoteHighlight(canvas, context, timestamp, progresspos, Math.max(stagestart, pagestart), Math.min(stageend, pageend));
     drawNoteSide(canvas, context, timestamp, progresspos, Math.max(stageend, pagestart), Math.min(canvas.height, pageend));
 }
 function drawNoteMain(canvas, context, timestamp, progresspos, stagestart, stageend) {

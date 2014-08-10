@@ -48,8 +48,8 @@ p {
 .banner {
     width: 100%;
     height: 3rem;
-    background-image: -webkit-linear-gradient(top, rgba(240, 255, 240, 0.9059) 0%, rgba(255, 255, 255, 0.9686) 100%);
-    background-image: linear-gradient(to bottom, rgba(240, 255, 240, 0.9059) 0%, rgba(255, 255, 255, 0.9686) 100%);
+    background-image: -webkit-linear-gradient(top, rgba(240, 255, 240, 0.75) 0%, rgba(255, 255, 255, 0.85) 100%);
+    background-image: linear-gradient(to bottom, rgba(240, 255, 240, 0.7) 0%, rgba(255, 255, 255, 0.8) 100%);
     box-shadow: 0rem 1rem 2rem -1rem rgba(0, 0, 0, 0.25);
 }
 .logo {
