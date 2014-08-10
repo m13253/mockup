@@ -34,8 +34,8 @@ window.pauseVisual = function () {
     visualPaused = true;
 };
 window.refreshVisual = function () {
-    if(!visualPaused)
-        paintVisual;
+    if(visualPaused)
+        paintVisual();
 }
 var midiData;
 window.startVisual = function (url) {
