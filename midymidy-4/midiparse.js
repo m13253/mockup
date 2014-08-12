@@ -174,6 +174,10 @@ function noteoff(time, channel, note, vel) {
     midiData.maxtime = Math.max(midiData.maxtime, time);
     var slice    = Math.floor(noteData.start/midiData.slicelen);
     var sliceend = Math.ceil(time/midiData.slicelen);
+    if(sliceend-slice > 100) {
+        console.warn('Such note is too long: '+JSON.stringify(noteData));
+        return;
+    }
     for(; slice <= sliceend; slice++) {
         if(!midiData.timeslice[channel])
             midiData.timeslice[channel] = new Array();
@@ -216,11 +220,18 @@ function scanInt(buffer, offset, len) {
     if(len == 0)
         return 0;
     var res = 0;
-    for(var i = offset; i < offset+len; i++)
-        if(buffer[i] === undefined)
-            return;
-        else
-            res = (res<<8) | buffer[i];
+    if(len < 4)
+        for(var i = offset; i < offset+len; i++)
+            if(buffer[i] === undefined)
+                return;
+            else
+                res = (res<<8) | buffer[i];
+    else
+        for(var i = offset; i < offset+len; i++)
+            if(buffer[i] === undefined)
+                return;
+            else
+                res = (res*256) + buffer[i];
     return res;
 }
 function scanBigint(buffer, offset) {
