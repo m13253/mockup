@@ -136,6 +136,8 @@ function drawNoteMain(canvas, context, timestamp, progresspos, stagestart, stage
     context.rect(0, stagestart, canvas.width, stageend-stagestart);
     context.clip();
     context.globalAlpha = 0.75;
+    context.strokeStyle = "#eeeeee";
+    context.lineWidth = context.width/1024;
     for(var channel_index = 0; channel_index < 16; channel_index++) {
         var channel = channel_order[channel_index];
         if(!midiData.timeslice[channel])
@@ -153,6 +155,7 @@ function drawNoteMain(canvas, context, timestamp, progresspos, stagestart, stage
                     }
                 }
         context.fill();
+        context.stroke();
     }
     context.restore();
 }
