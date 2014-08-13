@@ -137,7 +137,7 @@ function drawNoteMain(canvas, context, timestamp, progresspos, stagestart, stage
     context.clip();
     context.globalAlpha = 0.75;
     context.strokeStyle = "rgba(255, 255, 255, 0.25)";
-    context.lineWidth = context.width/2048;
+    context.lineWidth = context.width/1024;
     for(var channel_index = 0; channel_index < 16; channel_index++) {
         var channel = channel_order[channel_index];
         if(!midiData.timeslice[channel])
