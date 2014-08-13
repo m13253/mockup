@@ -136,7 +136,7 @@ function drawNoteMain(canvas, context, timestamp, progresspos, stagestart, stage
     context.rect(0, stagestart, canvas.width, stageend-stagestart);
     context.clip();
     context.globalAlpha = 0.75;
-    context.strokeStyle = "rgba(255, 255, 255, 0.25)";
+    context.strokeStyle = "rgba(255, 255, 255, 0.33)";
     context.lineWidth = context.width/1024;
     for(var channel_index = 0; channel_index < 16; channel_index++) {
         var channel = channel_order[channel_index];
@@ -155,7 +155,8 @@ function drawNoteMain(canvas, context, timestamp, progresspos, stagestart, stage
                     }
                 }
         context.fill();
-        context.stroke();
+        if(canvas.width >= 512)
+            context.stroke();
     }
     context.restore();
 }
