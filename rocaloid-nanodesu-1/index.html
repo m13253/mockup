@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+<script language="javascript">
+(function() {
+    var languages = navigator.languages || [navigator.language];
+    var redir_target = "zh-cn/";
+    for(var i = 0; i < languages.length; i++) {
+        var language = languages[i].toLowerCase();
+        if(language == "zh-cn" || language == "zh-sg" || language == "zh-hans") {
+            redir_target = "zh-cn/"; break;
+        } else if(language == "zh-tw" || language == "zh-hk" || language == "zh-hant") {
+            redir_target = "zh-tw/"; break;
+        } else if(language.substr(0, 3) == "ja-" || language == "ja") {
+            redir_target = "ja/"; break;
+        } else if(language.substr(0, 3) == "en-" || language == "en") {
+            redir_target = "en/"; break;
+        }
+    }
+    location.replace(redir_target);
+})();
+</script>
+<noscript>
+<meta http-equiv="Refresh" content="0; zh-cn/">
+</noscript>
+</head>
+</html>
