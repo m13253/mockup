@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="zh-cn">
+<head>
+<meta charset="UTF-8" />
+<title>Windows 正在更新（误）</title>
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<style>
+@keyframes bgcolor {
+    0%   { background-color: #006699; }
+    50%  { background-color: #002233; }
+    100% { background-color: #006699; }
+}
+html {
+    height: 100%;
+}
+body {
+    -webkit-font-smoothing: antialiased;
+    animation-delay: 5s;
+    animation-duration: 20s;
+    animation-iteration-count: infinite;
+    animation-name: bgcolor;
+    background-color: #006699;
+    color: white;
+    font-family: "Segoe UI", "Microsoft Yahei UI";
+    height: 100%;
+    margin: 0px;
+}
+@font-face {
+    font-family: "Windows 8 Boot";
+    src: url("Win8Boot.svg");
+}
+.content {
+    position: absolute;
+    text-align: center;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 100%;
+}
+#animation {
+    font-family: "Windows 8 Boot";
+    font-size: 32pt;
+}
+#description {
+    margin-top: 18pt;
+    font-size: 18pt;
+}
+#footer {
+    bottom: 42pt;
+    font-size: 14pt;
+    position: absolute;
+    text-align: center;
+    width: 100%;
+}
+</style>
+</head>
+<body>
+<div class="content">
+<div id="animation"></div>
+<div id="description" contenteditable></div>
+</div>
+<div id="footer" contenteditable>
+    请不要关闭电脑
+</div>
+<script language="javascript">
+(() => {
+    const firstCode = 0xe052
+    const lastCode = 0xe0cc
+    const frameRate = 30
+    const startTime = new Date()
+    const updateFrame = () => {
+        const getCode = () => (new Date()-startTime)*frameRate/1000%(lastCode-firstCode)+firstCode
+        document.getElementById("animation").innerText = String.fromCharCode(getCode())
+        requestAnimationFrame(updateFrame)
+    }
+    updateFrame()
+    const descriptions = [
+        "千门万户曈曈日，总把新桃换旧符。\n" +
+        "Windows 将保持最新状态，为你的网络之履保驾护航。",
+        "青，出于蓝而胜于蓝。冰，水为之而寒于水。\n" +
+        "正在准备升级，请勿关闭你的电脑。"
+    ]
+    document.getElementById("description").innerText = descriptions[Math.floor(Math.random() * descriptions.length)]
+})()
+</script>
+</body>
+</html>
