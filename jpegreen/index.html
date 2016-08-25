@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8" />
+<title>JPEGreen Simulator</title>
+<style>
+html {
+    height: 100%;
+    margin: 0px;
+}
+body {
+    height: 100%;
+    margin: 0px;
+    display: flex;
+    flex-direction: column;
+}
+.header, .footer {
+    margin-left: 14pt;
+}
+.content {
+    display: flex;
+    flex-direction: row;
+    flex-grow: 1;
+}
+#origImage, #greenImage {
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
+    flex-grow: 1;
+}
+#canvas {
+    display: none;
+}
+</style>
+</head>
+<body>
+<div class="header">
+  <p>Android had a <a href="https://github.com/google/skia/commit/c7d01d3e1d3621907c27b283fb7f8b6e177c629d" target="_blank">bug causing pictures to be a slightly greener after load & save</a>. This WebApp will simulate this process.</p>
+  <p><label for="imageLoader">Select an image:&#32;</label><input type="file" id="imageLoader" /></p>
+</div>
+<div class="content">
+  <div id="origImage"></div>
+  <div id="greenImage"></div>
+</div>
+<div class="footer">
+  <p><label for="iters">Iterations:&#32;</label><input type="number" id="iterbox" min="0" value="0" /></p>
+  <p>Copyright &copy; 2016 Star Brilliant. All rights reserved.</p>
+</div>
+<canvas id="canvas"></canvas>
+<script language="javascript">
+(() => {
+    "use strict";
+    const imageLoader = document.getElementById("imageLoader")
+    const origImage = document.getElementById("origImage")
+    const greenImage = document.getElementById("greenImage")
+    const iterBox = document.getElementById("iterbox")
+    const img = new Image()
+    const processImage = () => {
+        const canvas = document.getElementById("canvas")
+        const ctx = canvas.getContext("2d")
+        canvas.width = img.width
+        canvas.height = img.height
+        ctx.clearRect(0, 0, img.width, img.height)
+        ctx.drawImage(img, 0, 0)
+        const imageData = ctx.getImageData(0, 0, img.width, img.height)
+        const data = imageData.data
+        let iter = parseInt(iterBox.value)
+        if(Number.isNaN(iter)) {
+            iter = 0
+        }
+        for(let p = 0; p < data.length/4; ++p) {
+            let r = data[p*4];
+            let g = data[p*4+1];
+            let b = data[p*4+2];
+            for(let i = 0; i < iter; ++i) {
+                const y = (77*r + 150*g + 29*b) >> 8
+                const u = (-43*r - 85*g + 128*b) >> 8
+                const v = (128*r - 107*g - 21*b) >> 8
+                r = (65536*y           + 91881*v) >> 16
+                g = (65536*y - 22553*u - 46802*v) >> 16
+                b = (65536*y + 116130*u) >> 16
+            }
+            data[p*4]   = r
+            data[p*4+1] = g
+            data[p*4+2] = b
+        }
+        ctx.putImageData(imageData, 0, 0)
+        const dataURL = canvas.toDataURL("image/png")
+        greenImage.style.backgroundImage = `url("${dataURL}")`
+    }
+    imageLoader.addEventListener("change", () => {
+        const reader = new FileReader()
+        reader.addEventListener("load", () => {
+            origImage.style.backgroundImage = `url("${reader.result}")`
+            img.src = reader.result
+        })
+        reader.readAsDataURL(imageLoader.files[0])
+    })
+    img.addEventListener("load", processImage)
+    iterBox.addEventListener("change", processImage)
+})()
+</script>
+</body>
+</html>
