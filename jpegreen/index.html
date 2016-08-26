@@ -69,7 +69,7 @@ body {
     <label for="quality">&#32;Quality:&#32;</label>
     <input type="range" id="quality" min="0" max="101" value="75" />
     <span>&#32;</span>
-    <span id="qualityText">75</span>
+    <span id="qualityText">75%</span>
   </p>
   <p>Copyright &copy; 2016 Star Brilliant. All rights reserved.</p>
 </div>
@@ -101,7 +101,7 @@ body {
         if(Number.isNaN(quality)) {
             quality = 75
         }
-        qualityText.innerText = quality <= 100 ? quality * 0.01 : "lossless"
+        qualityText.innerText = quality <= 100 ? quality + "%" : "lossless"
         return [iter, quality]
     }
     const resetProcess = () => {
@@ -139,7 +139,7 @@ body {
             data[p*4+2] = b
         }
         ctx.putImageData(imageData, 0, 0)
-        const dataURL = quality <= 100 ? canvas.toDataURL("image/jpeg", quality) : canvas.toDataURL("image/png")
+        const dataURL = quality <= 100 ? canvas.toDataURL("image/jpeg", quality * 0.01) : canvas.toDataURL("image/png")
         greenImg.style.backgroundImage = `url("${dataURL}")`
         currentIter.innerText = curiter
         image.src = dataURL
