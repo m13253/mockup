@@ -91,22 +91,25 @@ body {
     let curiter = 0
     let iter = 16
     let quality = 75
-    let imageSrc
-    const resetProcess = () => {
-        iter = parseInt(iterBox.value)
+    let imageSrc = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAAAAAA6fptVAAAACklEQVQIHWP4DwABAQEANl9ngAAAAABJRU5ErkJggg=="
+    const updateInput = () => {
+        let iter = parseInt(iterBox.value)
         if(Number.isNaN(iter)) {
             iter = 16
         }
-        curiter = 0
-        currentIter.innerText = 0
-        quality = parseInt(qualityBox.value)
+        let quality = parseInt(qualityBox.value)
         if(Number.isNaN(quality)) {
             quality = 75
         }
         qualityText.innerText = quality <= 100 ? quality : "lossless"
+        return [iter, quality]
+    }
+    const resetProcess = () => {
+        [iter, quality] = updateInput()
+        curiter = 0
+        currentIter.innerText = 0
         if(imageSrc) {
             image.src = imageSrc
-            requestAnimationFrame(processImage)
         }
     }
     const processImage = () => {
@@ -154,9 +157,10 @@ body {
         requestAnimationFrame(processImage)
     })
     iterBox.addEventListener("change", resetProcess)
-    iterBox.addEventListener("input", resetProcess)
+    iterBox.addEventListener("input", updateInput)
     qualityBox.addEventListener("change", resetProcess)
-    qualityBox.addEventListener("input", resetProcess)
+    qualityBox.addEventListener("input", updateInput)
+    image.src = imageSrc
 })()
 </script>
 </body>
