@@ -101,7 +101,7 @@ body {
         if(Number.isNaN(quality)) {
             quality = 75
         }
-        qualityText.innerText = quality <= 100 ? quality : "lossless"
+        qualityText.innerText = quality <= 100 ? quality * 0.01 : "lossless"
         return [iter, quality]
     }
     const resetProcess = () => {
