@@ -172,10 +172,10 @@ body {
         }
     })
     downloadBtn.addEventListener("click", () => {
-        if(imageSrc) {
+        if(image.src) {
             const dotIndex = imageName.lastIndexOf(".")
             downloadLink.download = (dotIndex == -1 ? imageName : imageName.substring(0, dotIndex)) + (quality <= 100 ? "_JPEGreen.jpg" : "_JPEGreen.png")
-            downloadLink.href = imageSrc
+            downloadLink.href = image.src
             downloadLink.click()
         }
     })
