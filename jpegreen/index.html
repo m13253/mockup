@@ -18,6 +18,9 @@ body {
 .header, .footer {
     margin-left: 14pt;
 }
+#downloadLink {
+    display: none;
+}
 .content {
     display: flex;
     flex-direction: row;
@@ -55,6 +58,7 @@ body {
     <label for="imageLoader">Select an image:&#32;</label>
     <input type="file" id="imageLoader" accept="image/*" />
     <button id="downloadBtn" disabled="disabled">Download result</button>
+    <a id="downloadLink"></a>
   </p>
 </div>
 <div class="content">
@@ -81,6 +85,7 @@ body {
     const ctx = canvas.getContext("2d")
     const currentIter = document.getElementById("currentIter")
     const downloadBtn = document.getElementById("downloadBtn")
+    const downloadLink = document.getElementById("downloadLink")
     const greenImg = document.getElementById("greenImg")
     const image = new Image()
     const imageLoader = document.getElementById("imageLoader")
@@ -119,7 +124,6 @@ body {
     const processImage = () => {
         if(curiter == iter) {
             downloadBtn.disabled = false
-            console.log(downloadBtn.disabled)
             return
         }
         ++curiter
@@ -169,9 +173,8 @@ body {
     })
     downloadBtn.addEventListener("click", () => {
         if(imageSrc) {
-            const downloadLink = document.createElement("a")
             const dotIndex = imageName.lastIndexOf(".")
-            downloadLink.download = (dotIndex == -1 ? imageName : imageName.substring(0, dotIndex)) + (quality <= 100 ? "-JPEGreen.jpg" : "-JPEGreen.png")
+            downloadLink.download = (dotIndex == -1 ? imageName : imageName.substring(0, dotIndex)) + (quality <= 100 ? "_JPEGreen.jpg" : "_JPEGreen.png")
             downloadLink.href = imageSrc
             downloadLink.click()
         }
