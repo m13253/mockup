@@ -53,7 +53,8 @@ body {
   <p>Android had a <a href="https://github.com/google/skia/commit/c7d01d3e1d3621907c27b283fb7f8b6e177c629d" target="_blank">bug causing pictures to be a slightly greener after load & save</a>. This WebApp will simulate this process.</p>
   <p>
     <label for="imageLoader">Select an image:&#32;</label>
-    <input type="file" id="imageLoader" />
+    <input type="file" id="imageLoader" accept="image/*" />
+    <button id="downloadBtn" disabled="disabled">Download result</button>
   </p>
 </div>
 <div class="content">
@@ -79,6 +80,7 @@ body {
     const canvas = document.createElement("canvas")
     const ctx = canvas.getContext("2d")
     const currentIter = document.getElementById("currentIter")
+    const downloadBtn = document.getElementById("downloadBtn")
     const greenImg = document.getElementById("greenImg")
     const image = new Image()
     const imageLoader = document.getElementById("imageLoader")
@@ -91,7 +93,7 @@ body {
     let curiter = 0
     let iter = 16
     let quality = 75
-    let imageSrc = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAAAAAA6fptVAAAACklEQVQIHWP4DwABAQEANl9ngAAAAABJRU5ErkJggg=="
+    let imageSrc
     const updateInput = () => {
         let iter = parseInt(iterBox.value)
         if(Number.isNaN(iter)) {
@@ -106,6 +108,7 @@ body {
     }
     const resetProcess = () => {
         [iter, quality] = updateInput()
+        downloadBtn.disabled = true
         curiter = 0
         currentIter.innerText = 0
         if(imageSrc) {
@@ -114,6 +117,8 @@ body {
     }
     const processImage = () => {
         if(curiter == iter) {
+            downloadBtn.disabled = false
+            console.log(downloadBtn.disabled)
             return
         }
         ++curiter
@@ -144,6 +149,9 @@ body {
         currentIter.innerText = curiter
         image.src = dataURL
     }
+    image.addEventListener("load", () => {
+        requestAnimationFrame(processImage)
+    })
     imageLoader.addEventListener("change", () => {
         const reader = new FileReader()
         reader.addEventListener("load", () => {
@@ -154,14 +162,18 @@ body {
         })
         reader.readAsDataURL(imageLoader.files[0])
     })
-    image.addEventListener("load", () => {
-        requestAnimationFrame(processImage)
+    downloadBtn.addEventListener("click", () => {
+        if(imageSrc) {
+            const downloadLink = document.createElement("a")
+            downloadLink.href = imageSrc
+            downloadLink.download = quality <= 100 ? "JPEGreen.jpg" : "JPEGreen.png"
+            downloadLink.click()
+        }
     })
     iterBox.addEventListener("change", resetProcess)
     iterBox.addEventListener("input", updateInput)
     qualityBox.addEventListener("change", resetProcess)
     qualityBox.addEventListener("input", updateInput)
-    image.src = imageSrc
 })()
 </script>
 </body>
