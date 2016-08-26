@@ -106,7 +106,7 @@ body {
         qualityText.innerText = quality <= 100 ? quality : "lossless"
         if(imageSrc) {
             image.src = imageSrc
-            processImage()
+            requestAnimationFrame(processImage)
         }
     }
     const processImage = () => {
@@ -146,7 +146,7 @@ body {
             imageSrc = reader.result
             greenImg.style.backgroundImage =
             origImg.style.backgroundImage = `url("${imageSrc}")`
-            image.src = imageSrc
+            resetProcess()
         })
         reader.readAsDataURL(imageLoader.files[0])
     })
