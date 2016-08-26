@@ -93,6 +93,7 @@ body {
     let curiter = 0
     let iter = 16
     let quality = 75
+    let imageName = "image"
     let imageSrc
     const updateInput = () => {
         let iter = parseInt(iterBox.value)
@@ -153,20 +154,25 @@ body {
         requestAnimationFrame(processImage)
     })
     imageLoader.addEventListener("change", () => {
-        const reader = new FileReader()
-        reader.addEventListener("load", () => {
-            imageSrc = reader.result
-            greenImg.style.backgroundImage =
-            origImg.style.backgroundImage = `url("${imageSrc}")`
-            resetProcess()
-        })
-        reader.readAsDataURL(imageLoader.files[0])
+        if(imageLoader.files.length != 0) {
+            const file = imageLoader.files[0]
+            imageName = file.name
+            const reader = new FileReader()
+            reader.addEventListener("load", () => {
+                imageSrc = reader.result
+                greenImg.style.backgroundImage =
+                origImg.style.backgroundImage = `url("${imageSrc}")`
+                resetProcess()
+            })
+            reader.readAsDataURL(file)
+        }
     })
     downloadBtn.addEventListener("click", () => {
         if(imageSrc) {
             const downloadLink = document.createElement("a")
+            const dotIndex = imageName.lastIndexOf(".")
+            downloadLink.download = (dotIndex == -1 ? imageName : imageName.substring(0, dotIndex)) + (quality <= 100 ? "-JPEGreen.jpg" : "-JPEGreen.png")
             downloadLink.href = imageSrc
-            downloadLink.download = quality <= 100 ? "JPEGreen.jpg" : "JPEGreen.png"
             downloadLink.click()
         }
     })
