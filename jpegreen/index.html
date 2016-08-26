@@ -112,13 +112,17 @@ body {
         qualityText.innerText = quality <= 100 ? quality + "%" : "lossless"
         return [iter, quality]
     }
-    const resetProcess = () => {
+    const resetProcess = (lax) => {
         [iter, quality] = updateInput()
         downloadBtn.disabled = true
-        curiter = 0
-        currentIter.innerText = 0
-        if(imageSrc) {
-            image.src = imageSrc
+        if (curiter > iter || lax !== true) {
+            curiter = 0
+            currentIter.innerText = 0
+            if(imageSrc) {
+                image.src = imageSrc
+            }
+        } else {
+            image.src = image.src
         }
     }
     const processImage = () => {
@@ -179,7 +183,7 @@ body {
             downloadLink.click()
         }
     })
-    iterBox.addEventListener("change", resetProcess)
+    iterBox.addEventListener("change", () => resetProcess(true))
     iterBox.addEventListener("input", updateInput)
     qualityBox.addEventListener("change", resetProcess)
     qualityBox.addEventListener("input", updateInput)
