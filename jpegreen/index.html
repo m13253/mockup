@@ -9,10 +9,11 @@ html {
     margin: 0px;
 }
 body {
-    height: 100%;
-    margin: 0px;
     display: flex;
     flex-direction: column;
+    font-family: -apple-system, "Segoe UI", sans-serif;
+    height: 100%;
+    margin: 0px;
 }
 .header, .footer {
     margin-left: 14pt;
@@ -22,82 +23,140 @@ body {
     flex-direction: row;
     flex-grow: 1;
 }
-#origImage, #greenImage {
+#origImg, #greenImg {
     background-size: contain;
     background-repeat: no-repeat;
     background-position: 50% 50%;
     flex-grow: 1;
 }
-#canvas {
-    display: none;
+#iters {
+    width: 3em;
+}
+#currentIter {
+    display: inline-block;
+    padding-right: 1em;
+    text-align: right;
+    width: 2em;
+}
+#quality {
+    width: 150pt;
+}
+#qualityText {
+    display: inline-block;
+    text-align: right;
+    width: 2em;
 }
 </style>
 </head>
 <body>
 <div class="header">
   <p>Android had a <a href="https://github.com/google/skia/commit/c7d01d3e1d3621907c27b283fb7f8b6e177c629d" target="_blank">bug causing pictures to be a slightly greener after load & save</a>. This WebApp will simulate this process.</p>
-  <p><label for="imageLoader">Select an image:&#32;</label><input type="file" id="imageLoader" /></p>
+  <p>
+    <label for="imageLoader">Select an image:&#32;</label>
+    <input type="file" id="imageLoader" />
+  </p>
 </div>
 <div class="content">
-  <div id="origImage"></div>
-  <div id="greenImage"></div>
+  <div id="origImg"></div>
+  <div id="greenImg"></div>
 </div>
 <div class="footer">
-  <p><label for="iters">Iterations:&#32;</label><input type="number" id="iterbox" min="0" value="0" /></p>
+  <p>
+    <label for="iters">Iterations:&#32;</label>
+    <input type="number" id="iterbox" min="0" max="9999" value="16" />
+    <span>&#32;Current:&#32;</span>
+    <span id="currentIter">0</span>
+    <label for="quality">&#32;Quality:&#32;</label>
+    <input type="range" id="quality" min="0" max="101" value="75" />
+    <span>&#32;</span>
+    <span id="qualityText">75</span>
+  </p>
   <p>Copyright &copy; 2016 Star Brilliant. All rights reserved.</p>
 </div>
-<canvas id="canvas"></canvas>
 <script language="javascript">
 (() => {
     "use strict";
+    const canvas = document.createElement("canvas")
+    const ctx = canvas.getContext("2d")
+    const currentIter = document.getElementById("currentIter")
+    const greenImg = document.getElementById("greenImg")
+    const image = new Image()
     const imageLoader = document.getElementById("imageLoader")
-    const origImage = document.getElementById("origImage")
-    const greenImage = document.getElementById("greenImage")
     const iterBox = document.getElementById("iterbox")
-    const img = new Image()
-    const processImage = () => {
-        const canvas = document.getElementById("canvas")
-        const ctx = canvas.getContext("2d")
-        canvas.width = img.width
-        canvas.height = img.height
-        ctx.clearRect(0, 0, img.width, img.height)
-        ctx.drawImage(img, 0, 0)
-        const imageData = ctx.getImageData(0, 0, img.width, img.height)
-        const data = imageData.data
-        let iter = parseInt(iterBox.value)
+    const origImg = document.getElementById("origImg")
+    const qualityBox = document.getElementById("quality")
+    const qualityText = document.getElementById("qualityText")
+    const clamp = x => x >= 0 ? x <= 255 ? x : 255 : 0
+    const clampuv = x => x >= -128 ? x <= 127 ? x : 127 : -128
+    let curiter = 0
+    let iter = 16
+    let quality = 75
+    let imageSrc
+    const resetProcess = () => {
+        iter = parseInt(iterBox.value)
         if(Number.isNaN(iter)) {
-            iter = 0
+            iter = 16
         }
+        curiter = 0
+        currentIter.innerText = 0
+        quality = parseInt(qualityBox.value)
+        if(Number.isNaN(quality)) {
+            quality = 75
+        }
+        qualityText.innerText = quality <= 100 ? quality : "lossless"
+        if(imageSrc) {
+            image.src = imageSrc
+            processImage()
+        }
+    }
+    const processImage = () => {
+        if(curiter == iter) {
+            return
+        }
+        ++curiter
+        canvas.width = image.width
+        canvas.height = image.height
+        ctx.clearRect(0, 0, image.width, image.height)
+        ctx.drawImage(image, 0, 0)
+        const imageData = ctx.getImageData(0, 0, image.width, image.height)
+        const data = imageData.data
         for(let p = 0; p < data.length/4; ++p) {
             let r = data[p*4];
             let g = data[p*4+1];
             let b = data[p*4+2];
-            for(let i = 0; i < iter; ++i) {
-                const y = (77*r + 150*g + 29*b) >> 8
-                const u = (-43*r - 85*g + 128*b) >> 8
-                const v = (128*r - 107*g - 21*b) >> 8
-                r = (65536*y           + 91881*v) >> 16
-                g = (65536*y - 22553*u - 46802*v) >> 16
-                b = (65536*y + 116130*u) >> 16
-            }
+            const y = clamp  (( 77*r + 150*g +  29*b) >> 8)
+            const u = clampuv(((-43*r -  85*g + 128*b) >> 8) - 1)
+            const v = clampuv(((128*r - 107*g -  21*b) >> 8) - 1)
+            r = clamp((65536*y           + 91881*v) >> 16)
+            g = clamp((65536*y - 22553*u - 46802*v) >> 16)
+            b = clamp((65536*y + 116130*u         ) >> 16)
             data[p*4]   = r
             data[p*4+1] = g
             data[p*4+2] = b
         }
         ctx.putImageData(imageData, 0, 0)
-        const dataURL = canvas.toDataURL("image/png")
-        greenImage.style.backgroundImage = `url("${dataURL}")`
+        const dataURL = quality <= 100 ? canvas.toDataURL("image/jpeg", quality) : canvas.toDataURL("image/png")
+        greenImg.style.backgroundImage = `url("${dataURL}")`
+        currentIter.innerText = curiter
+        image.src = dataURL
     }
     imageLoader.addEventListener("change", () => {
         const reader = new FileReader()
         reader.addEventListener("load", () => {
-            origImage.style.backgroundImage = `url("${reader.result}")`
-            img.src = reader.result
+            imageSrc = reader.result
+            greenImg.style.backgroundImage =
+            origImg.style.backgroundImage = `url("${imageSrc}")`
+            image.src = imageSrc
         })
         reader.readAsDataURL(imageLoader.files[0])
     })
-    img.addEventListener("load", processImage)
-    iterBox.addEventListener("change", processImage)
+    image.addEventListener("load", () => {
+        requestAnimationFrame(processImage)
+    })
+    iterBox.addEventListener("change", resetProcess)
+    iterBox.addEventListener("input", resetProcess)
+    qualityBox.addEventListener("change", resetProcess)
+    qualityBox.addEventListener("input", resetProcess)
 })()
 </script>
 </body>
