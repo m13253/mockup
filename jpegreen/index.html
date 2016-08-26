@@ -121,6 +121,14 @@ body {
             image.src = imageSrc
         }
     }
+    const updateIter = () => {
+        [iter, quality] = updateInput()
+        if(curiter <= iter) {
+            requestAnimationFrame(processImage)
+        } else {
+            resetProcess()
+        }
+    }
     const processImage = () => {
         if(curiter == iter) {
             downloadBtn.disabled = false
@@ -179,7 +187,7 @@ body {
             downloadLink.click()
         }
     })
-    iterBox.addEventListener("change", resetProcess)
+    iterBox.addEventListener("change", updateIter)
     iterBox.addEventListener("input", updateInput)
     qualityBox.addEventListener("change", resetProcess)
     qualityBox.addEventListener("input", updateInput)
