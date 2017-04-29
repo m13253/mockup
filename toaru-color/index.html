@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Toaru color chooser</title>
+        <script src="converter.js" charset="utf-8"></script>
+        <script src="chooser.js" charset="utf-8"></script>
+        <style>
+            .toaru-color-chooser {
+                display: flex;
+                flex-direction: row;
+            }
+            .toaru-color-chooser > div {
+                margin: 8pt;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="toaru-color-chooser">
+            <div class="tone-chooser">
+                <canvas id="tone-canvas" width="512" height="512"></canvas>
+            </div>
+            <div class="hue-chooser">
+                <canvas id="hue-canvas" width="32" height="512"></canvas>
+            </div>
+            <div class="value-panel">
+            </div>
+        </div>
+    </body>
+</html>
