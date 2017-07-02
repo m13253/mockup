@@ -2,7 +2,7 @@
 
 (() => {
 
-    let currentLch = [68, 44, 270];
+    let currentLch = [74, 40, 270];
 
     function repaintTone() {
         let toneCanvas = document.getElementById('tone-canvas');
@@ -29,7 +29,7 @@
         let ctx = hueCanvas.getContext('2d');
         let imageData = ctx.createImageData(hueCanvas.width, hueCanvas.height);
         for(let i = 0; i < imageData.height; ++i) {
-            let [l, c, h] = [68, 44, 360 - 360 * i / (imageData.height+1)];
+            let [l, c, h] = [74, 40, 360 - 360 * i / (imageData.height+1)];
             let [r, g, b] = ToaruConverter.Lch_sRGB(l, c, h);
             if(r > 255 || r < 0 || g > 255 || g < 0 || b > 255 || b < 0) {
                 r = g = b = 0xbc;

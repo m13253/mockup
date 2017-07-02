@@ -2,11 +2,6 @@
 
 class ToaruConverter {
 
-    // CIE 1931 2° D65
-    static get D65() {
-        return [95.047, 100, 108.883];
-    }
-
     // HTML to sRGB
     static HTML_sRGB(s) {
         s = s.trim();
@@ -54,104 +49,51 @@ class ToaruConverter {
         return '#' + r + g + b;
     }
 
-    // sRGB to Linear RGB
-    static sRGB_RGB(r, g, b) {
+    // sRGB to L*a*b*
+    // https://github.com/antimatter15/rgb-lab
+    static sRGB_Lab(r, g, b) {
         r /= 255;
         g /= 255;
         b /= 255;
 
-        r = r > 0.04045 ? Math.pow(((r + 0.055) / 1.055), 2.4) : (r / 12.92);
-        g = g > 0.04045 ? Math.pow(((g + 0.055) / 1.055), 2.4) : (g / 12.92);
-        b = b > 0.04045 ? Math.pow(((b + 0.055) / 1.055), 2.4) : (b / 12.92);
+        r = (r > 0.04045) ? Math.pow((r + 0.055) / 1.055, 2.4) : r / 12.92;
+        g = (g > 0.04045) ? Math.pow((g + 0.055) / 1.055, 2.4) : g / 12.92;
+        b = (b > 0.04045) ? Math.pow((b + 0.055) / 1.055, 2.4) : b / 12.92;
 
-        return [r, g, b];
+        let x = (r * 0.4124 + g * 0.3576 + b * 0.1805) / 0.95047;
+        let y = (r * 0.2126 + g * 0.7152 + b * 0.0722) / 1.00000;
+        let z = (r * 0.0193 + g * 0.1192 + b * 0.9505) / 1.08883;
+
+        x = (x > 0.008856) ? Math.pow(x, 1/3) : (7.787 * x) + 16/116;
+        y = (y > 0.008856) ? Math.pow(y, 1/3) : (7.787 * y) + 16/116;
+        z = (z > 0.008856) ? Math.pow(z, 1/3) : (7.787 * z) + 16/116;
+
+        return [(116 * y) - 16, 500 * (x - y), 200 * (y - z)]
     }
 
-    // Linear RGB to sRGB
-    static RGB_sRGB(r, g, b) {
-        r = r > 0.0031308 ? ((1.055 * Math.pow(r, 1.0 / 2.4)) - 0.055) : r = (r * 12.92);
-        g = g > 0.0031308 ? ((1.055 * Math.pow(g, 1.0 / 2.4)) - 0.055) : g = (g * 12.92);
-        b = b > 0.0031308 ? ((1.055 * Math.pow(b, 1.0 / 2.4)) - 0.055) : b = (b * 12.92);
+    // L*a*b* to sRGB
+    // https://github.com/antimatter15/rgb-lab
+    static Lab_sRGB(l_, a_, b_) {
+        let y = (l_ + 16) / 116;
+        let x = a_ / 500 + y;
+        let z = y - b_ / 200;
 
-        r *= 255;
-        g *= 255;
-        b *= 255;
+        x = 0.95047 * ((x * x * x > 0.008856) ? x * x * x : (x - 16/116) / 7.787);
+        y = 1.00000 * ((y * y * y > 0.008856) ? y * y * y : (y - 16/116) / 7.787);
+        z = 1.08883 * ((z * z * z > 0.008856) ? z * z * z : (z - 16/116) / 7.787);
 
-        return [r, g, b];
+        let r = x *  3.2406 + y * -1.5372 + z * -0.4986;
+        let g = x * -0.9689 + y *  1.8758 + z *  0.0415;
+        let b = x *  0.0557 + y * -0.2040 + z *  1.0570;
+
+        r = (r > 0.0031308) ? (1.055 * Math.pow(r, 1/2.4) - 0.055) : 12.92 * r;
+        g = (g > 0.0031308) ? (1.055 * Math.pow(g, 1/2.4) - 0.055) : 12.92 * g;
+        b = (b > 0.0031308) ? (1.055 * Math.pow(b, 1/2.4) - 0.055) : 12.92 * b;
+
+        return [r * 255, g * 255, b * 255];
     }
 
-    // Linear RGB to XYZ
-    static RGB_XYZ(r, g, b, white) {
-        white = white || ToaruConverter.D65;
-
-        let x = (r * 0.41239079926595) + (g * 0.35758433938387) + (b * 0.18048078840183);
-        let y = (r * 0.21263900587151) + (g * 0.71516867876775) + (b * 0.072192315360733);
-        let z = (r * 0.019330818715591) + (g * 0.11919477979462) + (b * 0.95053215224966);
-
-        x *= white[0];
-        y *= white[1];
-        z *= white[2];
-
-        return [x, y, z];
-    }
-
-    // XYZ to Linear RGB
-    static XYZ_RGB(x, y, z, white) {
-        white = white || ToaruConverter.D65;
-
-        x /= white[0];
-        y /= white[1];
-        z /= white[2];
-
-        // http://www.brucelindbloom.com/index.html?Eqn_RGB_XYZ_Matrix.html
-        let r = (x * 3.240969941904521) + (y * -1.537383177570093) + (z * -0.498610760293);
-        let g = (x * -0.96924363628087) + (y * 1.87596750150772) + (z * 0.041555057407175);
-        let b = (x * 0.055630079696993) + (y * -0.20397695888897) + (z * 1.056971514242878);
-
-        return [r, g, b];
-    }
-
-    // XYZ to L*a*b*
-    static XYZ_Lab(x, y, z, white) {
-        white = white || ToaruConverter.D65;
-
-        x /= white[0];
-        y /= white[1];
-        z /= white[2];
-
-        x = x > 0.008856 ? Math.pow(x, 1/3) : (7.787 * x) + (16 / 116);
-        y = y > 0.008856 ? Math.pow(y, 1/3) : (7.787 * y) + (16 / 116);
-        z = z > 0.008856 ? Math.pow(z, 1/3) : (7.787 * z) + (16 / 116);
-
-        let l = (116 * y) - 16;
-        let a = 500 * (x - y);
-        let b = 200 * (y - z);
-
-        return [l, a, b];
-    }
-
-    // L*a*b* to XYZ
-    static Lab_XYZ(l, a, b, white) {
-        white = white || ToaruConverter.D65;
-
-        let fy = (l + 16) / 116;
-        let fx = a / 500 + fy;
-        let fz = fy - b / 200;
-
-        const cbrt_epsilon = Math.pow(0.008856, 1/3);
-
-        let x = fx > cbrt_epsilon ? Math.pow(fx, 3) : (116 * fx - 16) / 903.3;
-        let y = l > 903.3 * 0.008856 ? Math.pow((l + 16) / 116, 3) : l / 903.3;
-        let z = fz > cbrt_epsilon ? Math.pow(fz, 3) : (116 * fz - 16) / 903.3;
-
-        x *= white[0];
-        y *= white[1];
-        z *= white[2];
-
-        return [x, y, z];
-    }
-
-    // L*a*b to Lch
+    // L*a*b* to Lch
     static Lab_Lch(l, a, b) {
         let c = Math.hypot(a, b);
         let h = Math.atan2(b, a) * 180 / Math.PI;
@@ -169,21 +111,16 @@ class ToaruConverter {
         return [l, a, b];
     }
 
-    // Lch to sRGB
-    static Lch_sRGB(l, c, h, whitepoint) {
-        let a, b, x, y, z, r, g;
-        [l, a, b] = ToaruConverter.Lch_Lab(l, c, h);
-        [x, y, z] = ToaruConverter.Lab_XYZ(l, a, b, whitepoint);
-        [r, g, b] = ToaruConverter.XYZ_RGB(x, y, z, whitepoint);
-        return ToaruConverter.RGB_sRGB(r, g, b);
+    // sRGB to Lch
+    static sRGB_Lch(r, g, b) {
+        let [l_, a_, b_] = ToaruConverter.sRGB_Lab(r, g, b);
+        return ToaruConverter.Lab_Lch(l_, a_, b_);
     }
 
-    // sRGB to Lch
-    static sRGB_Lch(r, g, b, whitepoint) {
-        let x, y, z, l, a;
-        [r, g, b] = ToaruConverter.sRGB_RGB(r, g, b);
-        [x, y, z] = ToaruConverter.RGB_XYZ(r, g, b, whitepoint);
-        [l, a, b] = ToaruConverter.XYZ_Lab(x, y, z, whitepoint);
-        return ToaruConverter.Lab_Lch(l, a, b);
+    // Lch to sRGB
+    static Lch_sRGB(l, c, h) {
+        let [l_, a_, b_] = ToaruConverter.Lch_Lab(l, c, h);
+        return ToaruConverter.Lab_sRGB(l_, a_, b_);
     }
+
 }
