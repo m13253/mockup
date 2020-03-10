@@ -25,7 +25,7 @@ class QbitfontDesigner {
     refWeight = "bold";
     refSize = 10 / 0.714;
 
-    ucs = 65;
+    ucs = 104;
     qpx: 0 | 1 | 2 | 3 = 0;
     glyphs = new Map<number, Glyph>();
     designCell = new Map<number, Map<number, HTMLTableCellElement>>();
