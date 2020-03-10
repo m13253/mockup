@@ -11,7 +11,7 @@ class QbitfontDesigner {
         this.refFont = "Noto Sans";
         this.refWeight = "bold";
         this.refSize = 10 / 0.714;
-        this.ucs = 65;
+        this.ucs = 104;
         this.qpx = 0;
         this.glyphs = new Map();
         this.designCell = new Map();
