@@ -128,24 +128,31 @@ class QbitfontDesigner {
     }
     tryLoadJSON() {
         try {
-            this.tryLoadJSON();
+            this.loadJSON();
             window.alert("JSON loaded successfully.");
         }
         catch (e) {
-            window.alert(`Error ${e}`);
+            window.alert(`Error: ${e}`);
             throw e;
         }
     }
     loadJSON() {
         const jsonText = document.getElementById("json-panel").value;
         const json = JSON.parse(jsonText);
+        let newGlyphs = new Map();
+        for (let [k, v] of this.glyphs) {
+            if ((k & 3) !== this.qpx) {
+                newGlyphs.set(k, v);
+            }
+        }
         for (let key in json) {
             const idx = +key | 0;
             if (idx.toString() !== key.toString()) {
                 throw Error(`invalid key "${key}"`);
             }
-            this.glyphs.set((idx << 2) | this.qpx, Glyph.fromJSON(json[key]));
+            newGlyphs.set((idx << 2) | this.qpx, Glyph.fromJSON(json[key]));
         }
+        this.glyphs = newGlyphs;
         this.refreshDesign();
         this.updatePreview();
     }
@@ -260,7 +267,7 @@ class QbitfontDesigner {
                 }
                 else if (cp !== " ") {
                     ctx.fillStyle = ["#f79494", "#b4b463", "#7ec07d", "#abaaf9"][offsetQpx & 3];
-                    ctx.fillRect(offsetPx * zoom, 0, zoom, this.height * zoom);
+                    ctx.fillRect(offsetPx * zoom, 0, 1, this.height * zoom);
                 }
                 ctx.restore();
                 previousText += cp;
