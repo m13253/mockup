@@ -1,0 +1,142 @@
+html {
+    height: 100%;
+}
+
+body {
+    margin: 0px;
+    height: 100%;
+    font-family: "Noto Sans", sans-serif;
+    font-size: 14px;
+}
+
+input {
+    font-family: "Noto Sans", sans-serif;
+    font-size: 14px;
+}
+
+.vcenter {
+    display: flex;
+    height: 100%;
+    margin: auto;
+    flex-direction: column;
+    justify-content: safe center;
+    align-items: safe center;
+}
+
+main {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+}
+
+main table {
+    border-spacing: 0px;
+}
+
+main td {
+    padding: 0px;
+}
+
+.top-panel {
+    display: flex;
+    width: 100%;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.main-panel {
+    display: flex;
+    width: 100%;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.bottom-panel {
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+}
+
+.top-panel input[type=button] {
+    margin: 12px;
+}
+
+#design-panel {
+    position: relative;
+    background-color: white;
+    margin: 12px;
+    flex-shrink: 0;
+}
+
+#blueprint {
+    position: absolute;
+    font-smooth: always;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: geometricPrecision;
+}
+
+#design-panel table {
+    position: relative;
+}
+
+#design-panel td {
+    border: solid 1px #cacaca;
+    width: 22px;
+    height: 22px;
+}
+
+#design-panel td.filled {
+    background-color: rgba(0, 0, 0, 0.528);
+    border: solid 1px #565656;
+}
+
+#charmap-panel {
+    background-color: white;
+    margin: 12px;
+    flex-shrink: 0;
+}
+
+#charmap-panel td {
+    border: solid 1px #cacaca;
+    color: black;
+    width: 24px;
+    height: 24px;
+    font-size: 14px;
+    line-height: 24px;
+    text-align: center;
+    vertical-align: middle;
+}
+
+#charmap-panel td.available {
+    background-color: #81d757;
+    color: black;
+}
+
+#charmap-panel td.selected {
+    background-color: #2c60d6;
+    color: white;
+}
+
+#json-panel {
+    width: 150pt;
+    min-height: 10em;
+    margin: 12px;
+    flex-grow: 1;
+    font-family: "Noto Sans Mono", monospace;
+    font-size: 10pt;
+    resize: none;
+}
+
+#test-text {
+    margin: 12px;
+}
+
+#preview-panel {
+    margin: 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}

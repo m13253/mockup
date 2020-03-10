@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Qbit Font Mockup</title>
+    <link rel="stylesheet" href="styles.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+</head>
+
+<body>
+    <div class="vcenter">
+        <main>
+            <div class="top-panel">
+                <input type="button" id="qpx0" value="Offset 0px" disabled="disabled" />
+                <input type="button" id="qpx1" value="Offset 0.25px" />
+                <input type="button" id="qpx2" value="Offset 0.5px" />
+                <input type="button" id="qpx3" value="Offset 0.75px" />
+                <input type="button" id="clear-glyph" value="Clear glyph" />
+                <div style="flex: 1"></div>
+                <input type="button" id="load-json" value="Load JSON" />
+            </div>
+            <div class="main-panel">
+                <div id="design-panel">
+                    <canvas id="blueprint" width="0" height="0"></canvas>
+                </div>
+                <div id="charmap-panel"></div>
+                <textarea id="json-panel">{}</textarea>
+            </div>
+            <div class="bottom-panel">
+                <input id="test-text" value="Lorem ipsum dolor sit amet." />
+                <div id="preview-panel"></div>
+            </div>
+        </main>
+    </div>
+    <script src="scripts.js"></script>
+    <script>
+        const designerConfig = {
+            ascent: 15,
+            height: 19,
+            left: -4,
+            width: 32,
+            glyphList: [32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125, 126, 0x25a1],
+            cellSize: 24,
+            refFont: "Noto Sans",
+            refWeight: "bold",
+            refSize: 10 / 0.714,
+        }
+        const designer = new QbitfontDesigner(designerConfig);
+    </script>
+</body>
+
+</html>
