@@ -96,7 +96,7 @@ class QbitfontDesigner {
             this.previewCanvas[i] = canvas;
             document.getElementById("preview-panel").appendChild(canvas);
         }
-        this.loadJSON();
+        this.updatePreview();
     }
     glyphIdx() {
         return (this.ucs << 2) | this.qpx;
@@ -128,7 +128,9 @@ class QbitfontDesigner {
     }
     tryLoadJSON() {
         try {
-            this.loadJSON();
+            const jsonText = document.getElementById("json-panel").value;
+            const json = JSON.parse(jsonText);
+            this.loadJSON(json, this.qpx, false);
             window.alert("JSON loaded successfully.");
         }
         catch (e) {
@@ -136,12 +138,10 @@ class QbitfontDesigner {
             throw e;
         }
     }
-    loadJSON() {
-        const jsonText = document.getElementById("json-panel").value;
-        const json = JSON.parse(jsonText);
+    loadJSON(json, qpx, shouldGenerate) {
         let newGlyphs = new Map();
         for (let [k, v] of this.glyphs) {
-            if ((k & 3) !== this.qpx) {
+            if ((k & 3) !== qpx) {
                 newGlyphs.set(k, v);
             }
         }
@@ -150,10 +150,13 @@ class QbitfontDesigner {
             if (idx.toString() !== key.toString()) {
                 throw Error(`invalid key "${key}"`);
             }
-            newGlyphs.set((idx << 2) | this.qpx, Glyph.fromJSON(json[key]));
+            newGlyphs.set((idx << 2) | qpx, Glyph.fromJSON(json[key]));
         }
         this.glyphs = newGlyphs;
         this.refreshDesign();
+        if (shouldGenerate && qpx === this.qpx) {
+            this.generateJSON();
+        }
         this.updatePreview();
     }
     onDesignCellChange(td, y, x, ev) {

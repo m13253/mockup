@@ -61,19 +61,19 @@ class QbitfontDesigner {
     }
     private tryLoadJSON(): void {
         try {
-            this.loadJSON();
+            const jsonText = (document.getElementById("json-panel") as HTMLTextAreaElement).value;
+            const json = JSON.parse(jsonText);
+            this.loadJSON(json, this.qpx, false);
             window.alert("JSON loaded successfully.");
         } catch (e) {
             window.alert(`Error: ${e}`);
             throw e;
         }
     }
-    private loadJSON(): void {
-        const jsonText = (document.getElementById("json-panel") as HTMLTextAreaElement).value;
-        const json = JSON.parse(jsonText);
+    public loadJSON(json: any, qpx: number, shouldGenerate: boolean): void {
         let newGlyphs = new Map<number, Glyph>();
         for (let [k, v] of this.glyphs) {
-            if ((k & 3) !== this.qpx) {
+            if ((k & 3) !== qpx) {
                 newGlyphs.set(k, v);
             }
         }
@@ -82,10 +82,13 @@ class QbitfontDesigner {
             if (idx.toString() !== key.toString()) {
                 throw Error(`invalid key "${key}"`);
             }
-            newGlyphs.set((idx << 2) | this.qpx, Glyph.fromJSON(json[key]));
+            newGlyphs.set((idx << 2) | qpx, Glyph.fromJSON(json[key]));
         }
         this.glyphs = newGlyphs;
         this.refreshDesign();
+        if (shouldGenerate && qpx === this.qpx) {
+            this.generateJSON();
+        }
         this.updatePreview();
     }
     private onDesignCellChange(td: HTMLTableCellElement, y: number, x: number, ev: MouseEvent): void {
@@ -294,7 +297,7 @@ class QbitfontDesigner {
             document.getElementById("preview-panel")!.appendChild(canvas);
         }
 
-        this.loadJSON();
+        this.updatePreview();
     }
 }
 
