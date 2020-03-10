@@ -59,24 +59,27 @@ class QbitfontDesigner {
         this.generateJSON();
         this.updatePreview();
     }
-    private loadJSON(): void {
+    private tryLoadJSON(): void {
         try {
-            const jsonText = (document.getElementById("json-panel") as HTMLTextAreaElement).value;
-            const json = JSON.parse(jsonText);
-            for (let key in json) {
-                const idx = +key | 0;
-                if (idx.toString() !== key.toString()) {
-                    throw Error(`invalid key "${key}"`);
-                }
-                this.glyphs.set((idx << 2) | this.qpx, Glyph.fromJSON(json[key]));
-            }
-            this.refreshDesign();
-            this.updatePreview();
+            this.tryLoadJSON();
             window.alert("JSON loaded successfully.");
         } catch (e) {
             window.alert(`Error ${e}`);
             throw e;
         }
+    }
+    private loadJSON(): void {
+        const jsonText = (document.getElementById("json-panel") as HTMLTextAreaElement).value;
+        const json = JSON.parse(jsonText);
+        for (let key in json) {
+            const idx = +key | 0;
+            if (idx.toString() !== key.toString()) {
+                throw Error(`invalid key "${key}"`);
+            }
+            this.glyphs.set((idx << 2) | this.qpx, Glyph.fromJSON(json[key]));
+        }
+        this.refreshDesign();
+        this.updatePreview();
     }
     private onDesignCellChange(td: HTMLTableCellElement, y: number, x: number, ev: MouseEvent): void {
         const fill = (ev.buttons & 3) === 1;
@@ -221,7 +224,7 @@ class QbitfontDesigner {
                 this.generateJSON();
             }
         });
-        document.getElementById("load-json")!.addEventListener("click", this.loadJSON.bind(this));
+        document.getElementById("load-json")!.addEventListener("click", this.tryLoadJSON.bind(this));
 
         this.blueprint = document.createElement("canvas");
         this.blueprint.id = "blueprint";
@@ -276,8 +279,6 @@ class QbitfontDesigner {
         }
         document.getElementById("charmap-panel")!.appendChild(charmapTable);
 
-        this.generateJSON();
-
         document.getElementById("test-text")!.addEventListener("input", this.updatePreview.bind(this));
         document.getElementById("test-text")!.addEventListener("click", this.updatePreview.bind(this));
         for (let i = 0; i < 4; i++) {
@@ -285,7 +286,8 @@ class QbitfontDesigner {
             this.previewCanvas[i] = canvas;
             document.getElementById("preview-panel")!.appendChild(canvas);
         }
-        this.updatePreview();
+
+        this.loadJSON();
     }
 }
 
