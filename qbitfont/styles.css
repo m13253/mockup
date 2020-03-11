@@ -134,6 +134,10 @@ main td {
     margin: 12px;
 }
 
+#preview-hint {
+    margin: 12px;
+}
+
 #preview-panel {
     margin: 12px;
     display: flex;
