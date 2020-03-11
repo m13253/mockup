@@ -91,7 +91,7 @@ class QbitfontDesigner {
         document.getElementById("charmap-panel").appendChild(charmapTable);
         document.getElementById("test-text").addEventListener("input", this.updatePreview.bind(this));
         document.getElementById("test-text").addEventListener("click", this.updatePreview.bind(this));
-        for (let i = 0; i < 4; i++) {
+        for (let i = 0; i < 3; i++) {
             const canvas = document.createElement("canvas");
             this.previewCanvas[i] = canvas;
             document.getElementById("preview-panel").appendChild(canvas);
