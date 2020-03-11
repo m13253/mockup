@@ -154,6 +154,7 @@ class QbitfontDesigner {
         }
         this.glyphs = newGlyphs;
         this.refreshDesign();
+        this.updateCharmap();
         if (shouldGenerate && qpx === this.qpx) {
             this.generateJSON();
         }
@@ -181,22 +182,9 @@ class QbitfontDesigner {
             return;
         }
         this.ucs = ucs;
-        for (let [k, v] of this.charmapCell) {
-            if (k === ucs) {
-                v.classList.add("selected");
-                v.classList.remove("available");
-            }
-            else if (this.glyphs.has((k << 2) | this.qpx)) {
-                v.classList.add("available");
-                v.classList.remove("selected");
-            }
-            else {
-                v.classList.remove("available");
-                v.classList.remove("selected");
-            }
-        }
         this.updateBlueprint();
         this.refreshDesign();
+        this.updateCharmap();
         this.generateJSON();
         this.updatePreview();
     }
@@ -225,6 +213,22 @@ class QbitfontDesigner {
         ctx.font = `${this.refWeight} ${this.refSize * this.cellSize}px '${this.refFont}'`;
         ctx.strokeText(str, -this.cellSize * this.left + this.qpx * 6, this.cellSize * this.ascent);
     }
+    updateCharmap() {
+        for (let [k, v] of this.charmapCell) {
+            if (k === this.ucs) {
+                v.classList.add("selected");
+                v.classList.remove("available");
+            }
+            else if (this.glyphs.has((k << 2) | this.qpx)) {
+                v.classList.add("available");
+                v.classList.remove("selected");
+            }
+            else {
+                v.classList.remove("available");
+                v.classList.remove("selected");
+            }
+        }
+    }
     generateJSON() {
         let json = {};
         for (let [idx, glyph] of this.glyphs) {
@@ -237,7 +241,7 @@ class QbitfontDesigner {
             }
             json[idx >> 2] = glyphJSON;
         }
-        const jsonText = JSON.stringify(json, null, 2);
+        const jsonText = JSON.stringify(json);
         document.getElementById("json-panel").value = jsonText;
     }
     updatePreview() {
@@ -429,8 +433,8 @@ class Glyph {
         for (let y = 0; y < (this.height | 0); y++) {
             let line = [];
             for (let x = 0; (x << 3) < (this.width | 0); x++) {
-                const cell = ((y * (this.stride | 0)) + x) | 0;
-                line.push(this.buffer[cell >> 3]);
+                const cell = ((y * (this.stride >> 3)) + x) | 0;
+                line.push(this.buffer[cell]);
             }
             value.bitmap.push(line);
         }
@@ -467,8 +471,8 @@ class Glyph {
                 if (value.bitmap[y][x] < 0 || value.bitmap[y][x] >= 256) {
                     throw RangeError(`bitmap[${y}][${x}] out of range`);
                 }
-                const cell = ((y * (glyph.stride | 0)) + x) | 0;
-                glyph.buffer[cell >> 3] = value.bitmap[y][x];
+                const cell = (y * (glyph.stride >> 3) + x) | 0;
+                glyph.buffer[cell] = value.bitmap[y][x];
             }
         }
         return glyph;
